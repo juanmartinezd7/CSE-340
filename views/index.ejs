@@ -1,1 +1,66 @@
-<h1>Juan Martinez</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/head') %>
+  </head>
+  <body class="checkerboard">
+    <!-- Blue bordered page panel -->
+    <div class="page">
+      <%- include('partials/header') %>
+
+      <main class="container main-content">
+        <section class="columns">
+          <!-- Left column: Upgrades (desktop) -->
+          <div class="col upgrades">
+            <h3>Delorean Upgrades</h3>
+
+            <div class="upgrade-grid">
+              <!-- Tile 1 -->
+              <a href="#" class="tile">
+                <div class="thumb">
+                  <img src="/images/upgrades/flux-cap.png" alt="" />
+                </div>
+                <span class="caption">Flux Capacitor</span>
+              </a>
+              <!-- Tile 2 -->
+              <a href="#" class="tile">
+                <div class="thumb">
+                  <img src="/images/upgrades/flame.jpg" alt="" />
+                </div>
+                <span class="caption">Flame Decals</span>
+              </a>
+              <!-- Tile 3 -->
+              <a href="#" class="tile">
+                <div class="thumb">
+                  <img src="/images/upgrades/bumper_sticker.jpg" alt="" />
+                </div>
+                <span class="caption">Bumper Stickers</span>
+              </a>
+              <!-- Tile 4 -->
+              <a href="#" class="tile">
+                <div class="thumb">
+                  <img src="/images/upgrades/hub-cap.jpg" alt="" />
+                </div>
+                <span class="caption">Hub Caps</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Right column: Reviews (desktop) -->
+          <div class="col reviews">
+            <h3>DMC Delorean Reviews</h3>
+            <ul class="review-list">
+              <li>“So fast it’s almost like traveling in time.” (4/5)</li>
+              <li>“Coolest ride on the road.” (4/5)</li>
+              <li>“I’m feeling McFly!” (5/5)</li>
+              <li>“The most futuristic ride of our day.” (4.5/5)</li>
+              <li>“80’s livin and I love it!” (5/5)</li>
+            </ul>
+          </div>
+        </section>
+      </main>
+
+      <%- include('partials/footer') %>
+    </div>
+  </body>
+</html>
