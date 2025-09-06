@@ -91,7 +91,7 @@ body { margin: 0; font-family: Inter, system-ui, Arial, sans-serif; color: #1f29
 .car-features{ margin: 0 0 12px 18px; color:#0c6a8a; }
 .car-features li{ margin: 2px 0; }
 .btn-primary{
-  display:inline-block; background:#1f9dd0; color:#fff; text-decoration:none;
+  display:inline-block; background:#221fd1; color:#fff; text-decoration:none;
   padding:10px 16px; border-radius:6px; font-weight:700;
 }
 .btn-primary:hover{ background:#0f84b3; }
@@ -133,7 +133,7 @@ body { margin: 0; font-family: Inter, system-ui, Arial, sans-serif; color: #1f29
 }
 .thumb img{ max-height: 88px; max-width: 100%; }
 .caption{
-  color:#1a4f92; text-decoration:underline; font-weight:600; align-self:end;
+  color:#fff; text-decoration:underline; font-weight:600; align-self:end;
 }
 
 /* Footer */
