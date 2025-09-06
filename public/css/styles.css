@@ -133,7 +133,7 @@ body { margin: 0; font-family: Inter, system-ui, Arial, sans-serif; color: #1f29
 }
 .thumb img{ max-height: 88px; max-width: 100%; }
 .caption{
-  color:#fff; text-decoration:underline; font-weight:600; align-self:end;
+  color: #000000; text-decoration:underline; font-weight:600; align-self:end;
 }
 
 /* Footer */
