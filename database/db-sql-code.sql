@@ -1,3 +1,4 @@
+--Create account_type data type
 CREATE TYPE public.account_type AS ENUM ('Client', 'Employee', 'Admin');
 ALTER TYPE public.account_type OWNER TO admin;
 -- Table structure for table `classification`
@@ -234,3 +235,32 @@ VALUES (
         'White',
         5
     );
+--Update statement to replace "the small interiors" text, to "a huge interior" from inv_description
+UPDATE public.inventory
+SET inv_description = REPLACE(
+        inv_description,
+        'the small interiors',
+        'a huge interior'
+    )
+WHERE inv_make = 'GM'
+    AND inv_model = 'Hummer'
+    AND inv_description LIKE '%the small interiors%';
+--Update all records in the inventory table to add "/vehicles" to the middle of the file path
+-- in the inv_image and inv_thumbnail columns
+BEGIN;
+UPDATE public.inventory
+SET inv_image = REGEXP_REPLACE(
+        inv_image,
+        '(^|/)images/(?!vehicles/)',
+        '\1images/vehicles/',
+        'g'
+    ),
+    inv_thumbnail = REGEXP_REPLACE(
+        inv_thumbnail,
+        '(^|/)images/(?!vehicles/)',
+        '\1images/vehicles/',
+        'g'
+    )
+WHERE inv_image ~ '(^|/)images/(?!vehicles/)'
+    OR inv_thumbnail ~ '(^|/)images/(?!vehicles/)';
+COMMIT;
