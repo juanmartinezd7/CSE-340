@@ -50,33 +50,118 @@ body { margin: 0; font-family: Inter, system-ui, Arial, sans-serif; color: #1f29
 
 /* Navigation strip */
 .main-nav{ background: var(--nav-bg); }
+
 .main-nav ul{
-  list-style:none; margin:0; padding: 10px 12px; display:flex; gap: 24px;
+  list-style: none;
+  margin: 0;
+  padding: 10px 12px;
+  /* mobile default: vertical stack */
+}
+.main-nav li{
+  /* add a little vertical spacing for mobile */
+  margin: 6px 0;
 }
 .main-nav a{
-  color: var(--nav-text); text-decoration:none; font-weight:600; padding: 6px 10px; border-radius:6px;
+  color: var(--nav-text);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 6px;
 }
 .main-nav li.active a,
 .main-nav a:hover{ background: rgba(255,255,255,.12); }
 
-/* Welcome + Hero */
-.welcome{ font-size: 28px; margin: 16px 0 12px; }
-/* Overlay hero: car behind transparent card */
-.hero-stage{
-  position: relative;
-  min-height: 360px;             /* ensures room for the car */
+/* Desktop: switch to horizontal */
+@media (min-width: 900px){
+  .main-nav ul{
+    display: flex;
+    gap: 24px;
+  }
+  .main-nav li{
+    margin: 0; /* remove mobile vertical spacing */
+  }
 }
 
-.hero-car{
-  position: absolute;
-  right: 46%;                     /* nudge past the edge like the mock */
-  bottom: 56px;
-  max-width: 50%;                 /* size of the car on desktop */
-  height: auto;
-  z-index: 0;                     /* BEHIND the card */
-  filter: drop-shadow(0 10px 20px rgba(0,0,0,.15));
-  opacity: 0.95;
+/* Inventory results list */
+#inv-display{
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
+
+/* Mobile-first: vertical stack */
+#inv-display > li{
+  margin: 12px 0;
+}
+
+/* Make images/cards behave nicely */
+#inv-display img{
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+}
+#inv-display .namePrice{
+  margin-top: 8px;
+}
+
+/* Desktop: 3-up grid */
+@media (min-width: 900px){
+  #inv-display{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px; /* spacing between cards */
+  }
+  #inv-display > li{
+    margin: 0; /* grid handles spacing */
+  }
+}
+
+/* Inventory results list (mobile-first = vertical) */
+#inv-display{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#inv-display > li{
+  margin: 12px 0;           /* spacing when stacked */
+}
+#inv-display img{
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+}
+#inv-display .namePrice{ margin-top: 8px; }
+
+/* Large screens: 3 items per row */
+@media (min-width: 900px){
+  /* Increase specificity in case other styles interfere */
+  main .container #inv-display,
+  .main-content #inv-display,
+  #inv-display{
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+  #inv-display > li{
+    margin: 0;              /* grid handles spacing */
+  }
+}
+
+.page-header{ padding: 12px 0 0; }
+.page-title{ margin: 12px 0 8px; font-size: 28px; font-weight: 700; }
+@media (min-width: 900px){
+  .page-title{ font-size: 32px; }
+}
+
+/* Skip link for keyboard users */
+.skip-link{
+  position: absolute; left: -9999px; top: 0;
+  background: #fff; padding: 8px 12px; border-radius: 6px;
+  border: 2px solid var(--panel-border);
+}
+.skip-link:focus{ left: 16px; top: 8px; }
 
 .hero-card{
   position: relative;
@@ -203,4 +288,6 @@ body { margin: 0; font-family: Inter, system-ui, Arial, sans-serif; color: #1f29
   }
   .upgrades, .reviews{ order: 0; }  /* reset any mobile ordering */
 }
+
+
 

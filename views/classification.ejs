@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/head') %>
+  </head>
+  <body class="checkerboard">
+    <!-- Accessibility: skip straight to main content -->
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <div class="page">
+      <!-- Only the nav -->
+      <%- include('partials/brandbar') %>
+      <%- include('partials/navigation') %>
+
+      <!-- Page heading just below the nav -->
+      <header class="container page-header">
+        <h1 class="page-title"><%= title || 'Vehicles' %></h1>
+      </header>
+
+      <main id="main" class="container main-content">
+        <%- grid %>
+      </main>
+
+      <%- include('partials/footer') %>
+    </div>
+  </body>
+</html>
+
+
+
