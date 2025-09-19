@@ -11,15 +11,19 @@
       <%- include('../partials/navigation') %>
 
       <header class="container page-header">
-        <h1>404 – PAGE NOT FOUND</h1>
-        <p class="muted">The page you’re looking for doesn’t exist or has moved.</p>
+        <h1 class="page-title"><%= title || (status === 404 ? '404 – Page Not Found' : '500 – Server Error') %></h1>
+        <% if (message) { %><p class="muted"><%= message %></p><% } %>
+        <% if (typeof status !== 'undefined') { %>
+          <p class="muted">Status code: <%= status %></p>
+        <% } %>
       </header>
 
       <main id="main" class="container main-content">
-        <p><a href="/" class="btn-primary">Go back home</a></p>
+        <p><a class="btn-primary" href="/">Go back home</a></p>
       </main>
 
       <%- include('../partials/footer') %>
     </div>
   </body>
 </html>
+

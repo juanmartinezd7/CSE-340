@@ -11,6 +11,8 @@ const app = express();
 
 const utilities = require('./utilities');
 
+const errorRoutes = require('./routes/errorRoute');
+
 // View engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -39,6 +41,9 @@ app.use('/inv', inventoryRoutes);
 //app.get('/', baseController.buildHome);
 app.get("/", utilities.handleErrors(baseController.buildHome))
 
+//Intentional
+app.use('/error', errorRoutes);   // e.g., http://localhost:5500/error/test
+
 // 404 catch-all (MUST be after all routes)
 app.use((req, res) => {
   res.status(404).render('errors/error', {
@@ -51,16 +56,25 @@ app.use((req, res) => {
 * Express Error Handler
 * Place after all other middleware
 *************************/
-app.use(async (err, req, res, next) => {
-  let nav = await utilities.getNav()
-  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
-  if(err.status == 404){ message = err.message} else {message = 'Oh no! There was a crash. Maybe try a different route?'}
-  res.render("errors/error", {
-    title: err.status || 'Server Error',
-    message,
-    nav
-  })
-})
+// Global error handler (keep this LAST)
+app.use((err, req, res, next) => {
+  const status = Number(err.status) || 500;
+  const title = status === 404 ? '404 – Page Not Found' : '500 – Server Error';
+  const message =
+    status === 404
+      ? (err.message || 'Sorry, we appear to have lost that page.')
+      : (err.message || 'Oh no! There was a crash. Maybe try a different route?');
+
+  console.error(`Error at: "${req.originalUrl}" [${status}]: ${err.message}`);
+
+  res.status(status).render('errors/error', {
+    status,  // <-- pass to view
+    title,
+    message
+    // nav comes from res.locals via your nav middleware
+  });
+});
+
 
 // Local server
 const PORT = process.env.PORT || 5500;

@@ -1,0 +1,49 @@
+<!--views/inventory/detail.ejs-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head') %>
+  </head>
+  <body class="checkerboard">
+    <div class="page">
+      <%- include('../partials/brandbar') %>
+      <%- include('../partials/navigation') %>
+
+      <main class="container main-content vehicle-detail">
+        <!-- Title at top -->
+        <h1 class="page-title"><%= title %></h1>
+
+        <section class="vd-grid">
+          <!-- Left: big image -->
+          <div class="vd-gallery">
+            <img src="<%= item.inv_image %>" alt="Image of <%= title %>">
+          </div>
+
+          <!-- Right: details card -->
+          <aside class="vd-info">
+            <h2 class="vd-heading"><%= item.inv_make %> <%= item.inv_model %> Details</h2>
+            <div class="vd-card">
+              <p class="spec"><strong>Price:</strong> <span class="vd-price"><%= price %></span></p>
+
+              <% if (item.inv_description) { %>
+                <p class="spec"><strong>Description:</strong>
+                  <span class="vd-desc"><%= item.inv_description %></span>
+                </p>
+              <% } %>
+
+              <% if (item.inv_color) { %>
+                <p class="spec"><strong>Color:</strong> <span><%= item.inv_color %></span></p>
+              <% } %>
+
+              <% if (miles) { %>
+                <p class="spec"><strong>Miles:</strong> <span><%= miles %></span></p>
+              <% } %>
+            </div>
+          </aside>
+        </section>
+      </main>
+
+      <%- include('../partials/footer') %>
+    </div>
+  </body>
+</html>

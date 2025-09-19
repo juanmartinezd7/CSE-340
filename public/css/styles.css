@@ -1,3 +1,4 @@
+/*public/css/atyles.css
 /* Reset-ish */
 * { box-sizing: border-box; }
 html, body { height: 100%; }
@@ -289,5 +290,28 @@ body { margin: 0; font-family: Inter, system-ui, Arial, sans-serif; color: #1f29
   .upgrades, .reviews{ order: 0; }  /* reset any mobile ordering */
 }
 
+
+/* Vehicle detail */
+.vehicle-detail .page-title{ margin:12px 0 16px; font-size:28px; font-weight:700; }
+@media (min-width:900px){ .vehicle-detail .page-title{ font-size:32px; } }
+
+.vd-grid{ display:grid; gap:20px; }
+@media (min-width:900px){
+  .vd-grid{ grid-template-columns: 1.1fr 0.9fr; align-items:start; }
+}
+
+.vd-gallery img{
+  width:100%; height:auto; display:block;
+  border-radius:8px; box-shadow:0 10px 24px rgba(0,0,0,.08);
+}
+
+.vd-heading{ margin:0 0 8px; font-size:20px; font-weight:700; }
+.vd-card{
+  background:#f3f4f6; border-radius:8px; padding:14px 16px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.04);
+}
+.spec{ margin:10px 0; }
+.vd-price{ color:#0b7ea3; font-weight:800; }
+.vd-desc{ color:#0c6a8a; }
 
 
