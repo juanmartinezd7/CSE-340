@@ -16,11 +16,11 @@ invCont.buildByClassificationId = async function (req, res, next) {
     const grid = await utilities.buildClassificationGrid(rows);
     const className = rows?.[0]?.classification_name || "Vehicles";
 
-    // If your file is at /views/classification.ejs:
+    // If file is at /views/classification.ejs:
     res.render("classification", {
       title: `${className} vehicles`,
-      grid,                // nav not needed if you set res.locals.nav in middleware
-      // nav: await utilities.getNav(), // only if you didn’t add the middleware
+      grid,                // nav not needed if set res.locals.nav in middleware
+      // nav: await utilities.getNav(), // only if didn’t add the middleware
     });
   } catch (err) {
     next(err);

@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Make the nav available to every render/partial
 app.use(async (req, res, next) => {
   try {
-    // pass req if you want active link highlighting
+    // pass req if want active link highlighting
     res.locals.nav = await utilities.getNav(req);
   } catch (err) {
     res.locals.nav = '<ul><li><a href="/" title="Home page">Home</a></li></ul>';
