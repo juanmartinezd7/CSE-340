@@ -47,7 +47,7 @@ body { margin: 0; font-family: Inter, system-ui, Arial, sans-serif; color: #1f29
   padding: 18px 0 2px;
 }
 .brand{ font-size: 32px; font-weight: 700; margin:0; }
-.account{ text-transform: uppercase; font-size: 12px; color:#6b7280; text-decoration:none; }
+.account{ text-transform: uppercase; font-size: 12px; color:#0b197f; text-decoration:none; }
 
 /* Navigation strip */
 .main-nav{ background: var(--nav-bg); }
@@ -223,7 +223,7 @@ body { margin: 0; font-family: Inter, system-ui, Arial, sans-serif; color: #1f29
 }
 
 /* Footer */
-.app-footer{ padding: 18px 0 26px; color:#6b7280; }
+.app-footer{ padding: 18px 0 26px; color:#0b197f; }
 
 /* ---------- Mobile (<= 768px) ---------- */
 @media (max-width: 768px){
@@ -311,7 +311,7 @@ body { margin: 0; font-family: Inter, system-ui, Arial, sans-serif; color: #1f29
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.04);
 }
 .spec{ margin:10px 0; }
-.vd-price{ color:#0b7ea3; font-weight:800; }
-.vd-desc{ color:#0c6a8a; }
+.vd-price{ color:#0b10a2; font-weight:800; }
+.vd-desc{ color:#1a0c88; }
 
 
