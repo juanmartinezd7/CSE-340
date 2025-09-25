@@ -1,0 +1,159 @@
+<!--views/account/register.ejs-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head') %>
+  </head>
+  <body class="checkerboard">
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <div class="page">
+      <%- include('../partials/brandbar') %>
+      <%- include('../partials/navigation') %>
+
+      <main id="main" class="container main-content register-screen">
+        <h1 class="page-title"><%= title %></h1>
+
+        <!-- Flash messages -->
+<% if (typeof messages === 'function') { %>
+  <%- messages() %>
+<% } %>
+
+<!-- One-time error helpers (define ONCE) -->
+<%
+  const hasErrors = (typeof errors !== 'undefined' && errors && Object.keys(errors).length > 0);
+  const fieldErrors = hasErrors ? errors : {};
+%>
+
+<!-- Summary list -->
+<% if (hasErrors) { %>
+  <ul class="notice">
+    <% Object.values(fieldErrors).forEach(err => { %>
+      <li><%= err.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<section class="register-card">
+  <form action="/account/register" method="post" class="register-form">
+    <div class="form-row">
+      <label for="account_firstname">First name</label>
+      <input
+        id="account_firstname"
+        name="account_firstname"
+        type="text"
+        required
+        minlength="2"
+        pattern="^[A-Za-z][A-Za-z' -]*$"
+        title="Only letters, apostrophes (’), spaces, and hyphens; must start with a letter."
+        autocomplete="given-name"
+        aria-invalid="<%= fieldErrors.account_firstname ? 'true' : 'false' %>"
+        aria-describedby="err_firstname"
+        value="<%= typeof account_firstname !== 'undefined' ? account_firstname : '' %>">
+      <% if (fieldErrors.account_firstname) { %>
+        <div class="field-error" id="err_firstname"><%= fieldErrors.account_firstname.msg %></div>
+      <% } %>
+    </div>
+
+    <div class="form-row">
+      <label for="account_lastname">Last name</label>
+      <input
+        id="account_lastname"
+        name="account_lastname"
+        type="text"
+        required
+        minlength="2"
+        pattern="^[A-Za-z][A-Za-z' -]*$"
+        title="Only letters, apostrophes (’), spaces, and hyphens; must start with a letter."
+        autocomplete="family-name"
+        aria-invalid="<%= fieldErrors.account_lastname ? 'true' : 'false' %>"
+        aria-describedby="err_lastname"
+        value="<%= typeof account_lastname !== 'undefined' ? account_lastname : '' %>">
+      <% if (fieldErrors.account_lastname) { %>
+        <div class="field-error" id="err_lastname"><%= fieldErrors.account_lastname.msg %></div>
+      <% } %>
+    </div>
+
+    <div class="form-row">
+      <label for="account_email">Email address</label>
+      <input
+        id="account_email"
+        name="account_email"
+        type="email"
+        required
+        autocomplete="email"
+        inputmode="email"
+        aria-invalid="<%= fieldErrors.account_email ? 'true' : 'false' %>"
+        aria-describedby="err_email"
+        value="<%= typeof account_email !== 'undefined' ? account_email : '' %>">
+      <% if (fieldErrors.account_email) { %>
+        <div class="field-error" id="err_email"><%= fieldErrors.account_email.msg %></div>
+      <% } %>
+    </div>
+
+    <div class="form-row">
+      <label for="account_password">Password</label>
+      <div class="password-input">
+        <input
+          id="account_password"
+          name="account_password"
+          type="password"
+          required
+          minlength="12"
+          autocomplete="new-password"
+          aria-describedby="pwHelp err_password"
+          aria-invalid="<%= fieldErrors.account_password ? 'true' : 'false' %>"
+          pattern="(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}">
+        <button type="button" id="togglePassword" class="btn-secondary" aria-pressed="false" aria-controls="account_password">Show</button>
+      </div>
+      <small id="pwHelp" class="help">
+        Must be at least <strong>12</strong> characters and include
+        <strong>1</strong> uppercase letter, <strong>1</strong> number, and <strong>1</strong> special character.
+      </small>
+      <% if (fieldErrors.account_password) { %>
+        <div class="field-error" id="err_password"><%= fieldErrors.account_password.msg %></div>
+      <% } %>
+    </div>
+
+    <button type="submit" class="btn-register">Register</button>
+  </form>
+</section>
+
+      </main>
+
+      <%- include('../partials/footer') %>
+    </div>
+
+    <script>
+      // Password show/hide toggle
+      (function () {
+        const input = document.getElementById('account_password');
+        const btn = document.getElementById('togglePassword');
+        if (!input || !btn) return;
+        btn.addEventListener('click', () => {
+          const isPwd = input.type === 'password';
+          input.type = isPwd ? 'text' : 'password';
+          btn.textContent = isPwd ? 'Hide' : 'Show';
+          btn.setAttribute('aria-pressed', String(isPwd));
+        });
+      }());
+    </script>
+    
+    <script>
+      //Validates name and last name entry
+  (function () {
+    function filterName(el){
+      // Keep letters, apostrophe, space, hyphen
+      el.value = el.value.replace(/[^A-Za-z' -]/g, '');
+    }
+    ['account_firstname','account_lastname'].forEach(id => {
+      const input = document.getElementById(id);
+      if (!input) return;
+      input.addEventListener('input', () => filterName(input));
+    });
+  }());
+</script>
+
+  </body>
+</html>
+

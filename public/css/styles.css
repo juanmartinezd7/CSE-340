@@ -314,4 +314,162 @@ body { margin: 0; font-family: Inter, system-ui, Arial, sans-serif; color: #1f29
 .vd-price{ color:#0b10a2; font-weight:800; }
 .vd-desc{ color:#1a0c88; }
 
+/*Account Login Screen
+/* --- Login page styling to match mock --- */
+.auth-screen { padding-top: 8px; }
+
+/* Dark blue card with tan border, rounded corners */
+.login-card{
+  background: #1f2f45;          /* dark navy */
+  border: 3px solid #cfb59d;    /* warm tan */
+  border-radius: 12px;
+  padding: 18px 20px 22px;
+  width: min(520px, 92vw);
+  margin-left: auto;            /* push card to the right */
+  box-shadow: 0 16px 36px rgba(0,0,0,.15);
+}
+
+/* Labels + inputs like the mock */
+.login-form .form-row{
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.login-form label{
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+.login-form input{
+  background: #fff;
+  color: #111;
+  border: 1px solid #cfd8e3;
+  border-radius: 10px;
+  padding: 10px 12px;
+  outline: none;
+}
+.login-form input:focus{
+  border-color: #9fc5e8;
+  box-shadow: 0 0 0 3px rgba(17,168,209,.25);
+}
+
+/* Pill login button, centered */
+.btn-login{
+  display: inline-block;
+  background: #fff;
+  color: #263746;
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 24px;
+  font-weight: 700;
+  margin: 8px auto 0;
+  cursor: pointer;
+}
+.btn-login:hover{ filter: brightness(0.95); }
+
+/* "No account? Sign-up" line */
+.login-subtext{
+  text-align: center;
+  color: #fff;
+  margin: 16px 0 4px;
+  font-size: 1.2rem;
+}
+.signup-link{
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* Make the card full-width on small screens, keep right-aligned on desktop */
+@media (max-width: 899.98px){
+  .login-card{ margin: 0 auto; }  /* center on phones */
+}
+
+/*Register form
+/* --- Register page --- */
+.register-screen { padding-top: 8px; }
+
+.register-card{
+  background: #ffffff;
+  border: 2px solid #1f2937;           /* dark border like mock */
+  border-radius: 6px;
+  padding: 18px 20px 22px;
+  width: min(520px, 92vw);
+  box-shadow: 0 12px 24px rgba(0,0,0,.08);
+}
+
+.register-form .form-row{
+  display: grid;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.register-form label{
+  color: #111827;
+  font-weight: 700;
+}
+.register-form input{
+  padding: 10px 12px;
+  border: 2px solid #111;             /* strong black border to match mock */
+  border-radius: 2px;
+  background: #fff;
+  color: #111;
+  outline: none;
+}
+.register-form input:focus{
+  border-color: #0b84e6;
+  box-shadow: 0 0 0 3px rgba(11,132,230,.25);
+}
+
+.password-input{
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+.btn-secondary{
+  appearance: none;
+  border: 1px solid #cbd5e1;
+  background: #f3f4f6;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btn-secondary:hover{ filter: brightness(.98); }
+
+.help{
+  color: #4b5563;
+  display: block;
+  margin-top: 6px;
+}
+
+.btn-register{
+  display: inline-block;
+  background: #1f73d2;                 /* blue pill button */
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 6px;
+}
+.btn-register:hover{ filter: brightness(.95); }
+
+/* layout: left on desktop, centered on mobile */
+@media (min-width: 900px){
+  .register-card{ margin-right: auto; } /* left align, like your mock */
+}
+@media (max-width: 899.98px){
+  .register-card{ margin: 0 auto; }     /* center on phones */
+}
+
+/*Validation*/
+.field-error{
+  color:#b91c1c;               /* red */
+  font-size: .9rem;
+  margin-top: 4px;
+}
+input[aria-invalid="true"]{
+  border-color:#b91c1c !important;
+  box-shadow: 0 0 0 3px rgba(185,28,28,.15);
+}
 

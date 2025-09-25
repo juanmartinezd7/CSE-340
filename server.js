@@ -5,13 +5,36 @@
 /* ***********************
  * Require Statements
  *************************/
+const session = require("express-session")
+const pool = require('./database/')
 const express = require('express');
 const path = require('path');
 const app = express();
-
 const utilities = require('./utilities');
-
 const errorRoutes = require('./routes/errorRoute');
+const bodyParser = require("body-parser")
+
+/* ***********************
+ * Middleware
+ * ************************/
+ app.use(session({
+  store: new (require('connect-pg-simple')(session))({
+    createTableIfMissing: true,
+    pool,
+  }),
+  secret: process.env.SESSION_SECRET,
+  resave: true,
+  saveUninitialized: true,
+  name: 'sessionId',
+}))
+
+// Express Messages Middleware
+app.use(require('connect-flash')())
+app.use(function(req, res, next){
+  res.locals.messages = require('express-messages')(req, res)
+  next()
+})
+
 
 // View engine
 app.set('view engine', 'ejs');
@@ -31,13 +54,28 @@ app.use(async (req, res, next) => {
   next();
 });
 
+// Parse application/x-www-form-urlencoded (HTML forms)
+app.use(express.urlencoded({ extended: false }));
+// (optional) Parse JSON bodies if you ever POST JSON
+app.use(express.json());
+
+
 // Routes
 const baseController = require('./controllers/baseController');
-const inventoryRoutes = require('./routes/inventoryRoute');
+const inventoryRoute = require('./routes/inventoryRoute');
+const accountRoutes = require('./routes/accountRoute');
 // const staticRoutes = require('./routes/static'); // not needed if using express.static above
 // app.use(staticRoutes);
 
-app.use('/inv', inventoryRoutes);
+// server.js (near the top, before app.use('/account', ...))
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json()); // optional
+
+app.use("/account", accountRoutes);
+app.use('/inv', inventoryRoute);
+// Account routes
+//app.use('/account', accountRoute);
+app.use("/account", require("./routes/accountRoute"))
 //app.get('/', baseController.buildHome);
 app.get("/", utilities.handleErrors(baseController.buildHome))
 
@@ -51,6 +89,9 @@ app.use((req, res) => {
     message: 'Sorry, we appear to have lost that page.',
   });
 });
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 /* ***********************
 * Express Error Handler

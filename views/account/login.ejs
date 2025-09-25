@@ -1,0 +1,99 @@
+<!--views/account/login.ejs-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head') %>
+  </head>
+  <body class="checkerboard">
+    <div class="page">
+      <%- include('../partials/brandbar') %>
+      <%- include('../partials/navigation') %>
+
+      <main class="container main-content auth-screen">
+        <h1 class="page-title"><%= title %></h1>
+
+        <!-- Flash messages -->
+        <% if (typeof messages === 'function') { %>
+          <%- messages() %>
+        <% } %>
+
+        <!-- One-time error helpers (define ONCE) -->
+<%
+  const hasErrors = (typeof errors !== 'undefined' && errors && Object.keys(errors).length > 0);
+  const fieldErrors = hasErrors ? errors : {};
+%>
+
+<!-- Summary list -->
+<% if (hasErrors) { %>
+  <ul class="notice">
+    <% Object.values(fieldErrors).forEach(err => { %>
+      <li><%= err.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+        <section class="login-card">
+          <form id="loginForm" action="/account/login" method="post" class="login-form">
+            <div class="form-row">
+              <label for="account_email">Email address</label>
+              <input
+                id="account_email"
+                name="account_email"
+                type="email"
+                required
+                autocomplete="email"
+                inputmode="email"
+                aria-invalid="<%= fieldErrors.account_email ? 'true' : 'false' %>"
+                aria-describedby="err_email"
+                value="<%= typeof account_email !== 'undefined' ? account_email : '' %>">
+              <% if (fieldErrors.account_email) { %>
+                <div class="field-error" id="err_email"><%= fieldErrors.account_email.msg %></div>
+              <% } %>
+            </div>
+
+
+            <div class="form-row">
+              <label for="password">Password:</label>
+              <div class="password-input">
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  autocomplete="new-password"> <!-- no bullet placeholder -->
+              <button type="button"
+                    id="togglePasswordLogin"
+                    class="btn-secondary"
+                    aria-pressed="false"
+                    aria-controls="password">Show</button>
+                </div>
+              </div>
+
+
+            <button type="submit" class="btn-login">LOGIN</button>
+          </form>
+
+          <p class="login-subtext">
+            No account? <a href="/account/register" class="signup-link">Sign-up</a>
+          </p>
+        </section>
+      </main>
+
+      <%- include('../partials/footer') %>
+    </div>
+    <script>
+  (function () {
+    const input = document.getElementById('password');
+    const btn = document.getElementById('togglePasswordLogin');
+    if (!input || !btn) return;
+    btn.addEventListener('click', () => {
+      const isPwd = input.type === 'password';
+      input.type = isPwd ? 'text' : 'password';
+      btn.textContent = isPwd ? 'Hide' : 'Show';
+      btn.setAttribute('aria-pressed', String(isPwd));
+    });
+  }());
+</script>
+
+  </body>
+</html>
