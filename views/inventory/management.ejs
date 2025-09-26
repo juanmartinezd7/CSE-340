@@ -1,0 +1,24 @@
+<!--views/inventory/management.ejs-->
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('../partials/head') %></head>
+<body class="checkerboard">
+  <div class="page">
+    <%- include('../partials/brandbar') %>
+    <%- include('../partials/navigation') %>
+
+    <main class="container main-content">
+      <h1>Vehicle Management</h1>
+
+      <% if (typeof messages === 'function') { %>
+        <%- messages() %>
+      <% } %>
+
+      <p><a href="/inv/add-classification">Add New Classification</a></p>
+      <p><a href="/inv/add-inventory">Add New Vehicle</a></p>
+    </main>
+
+    <%- include('../partials/footer') %>
+  </div>
+</body>
+</html>

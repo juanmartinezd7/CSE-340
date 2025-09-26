@@ -1,0 +1,38 @@
+<!--views/inventory/add-classification.ejs-->
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('../partials/head') %></head>
+<body class="checkerboard">
+  <div class="page">
+    <%- include('../partials/brandbar') %>
+    <%- include('../partials/navigation') %>
+
+    <main class="container main-content">
+      <h1>Add New Classification</h1>
+
+      <% if (typeof messages === 'function') { %>
+        <%- messages() %>
+      <% } %>
+
+      <form action="/inv/add-classification" method="post" class="classification-form" autocomplete="off">
+        <p class="hint"><em>Field is required. Name must be alphabetic characters only (no spaces or symbols).</em></p>
+
+        <label for="classification_name">Classification Name</label>
+        <input
+            id="classification_name"
+            name="classification_name"
+            type="text"
+            required
+            pattern="^[A-Za-z]+$"
+            title="Alphabetic only, no spaces or symbols"
+            value="<%= typeof classification_name !== 'undefined' ? classification_name : '' %>">
+
+        <button type="submit">Add Classification</button>
+      </form>
+
+    </main>
+
+    <%- include('../partials/footer') %>
+  </div>
+</body>
+</html>

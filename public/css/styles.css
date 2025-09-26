@@ -473,3 +473,188 @@ input[aria-invalid="true"]{
   box-shadow: 0 0 0 3px rgba(185,28,28,.15);
 }
 
+/* add-inventory view
+/* -------- Add Inventory form -------- */
+.inventory-form{
+  background: var(--panel);
+  border: 1px solid #e5e7eb;         /* subtle border */
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.06);
+}
+
+.inventory-form fieldset{ border: 0; margin: 0; padding: 0; }
+
+.inventory-form legend{
+  font-size: 14px; color: #6b7280; margin-bottom: 12px;
+  text-transform: uppercase; letter-spacing: .02em;
+}
+
+.inventory-form label{
+  display:block;
+  font-weight: 600;
+  margin-top: 12px;
+  margin-bottom: 6px;
+}
+
+/* Inputs, selects, textareas look the same */
+.inventory-form input[type="text"],
+.inventory-form input[type="number"],
+.inventory-form input[type="email"],
+.inventory-form input[type="url"],
+.inventory-form input[type="tel"],
+.inventory-form select,
+.inventory-form textarea{
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #cbd5e1;       /* slate-300 */
+  border-radius: 8px;
+  background: #f8fafc;               /* slate-50 */
+  color: #111827;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+/* Classification dropdown id from your utilities builder */
+#classificationList{
+  width: 100%;
+}
+
+/* Focus ring */
+.inventory-form input:focus,
+.inventory-form select:focus,
+.inventory-form textarea:focus{
+  outline: none;
+  border-color: var(--accent);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(17,168,209,.15);  /* accent glow */
+}
+
+/* Error state (server or client) */
+.inventory-form [aria-invalid="true"],
+.inventory-form input:invalid,
+.inventory-form select:invalid,
+.inventory-form textarea:invalid{
+  border-color: #dc2626;              /* red-600 */
+  box-shadow: 0 0 0 2px rgba(220,38,38,.10);
+}
+
+.inventory-form .field-error{
+  color:#b91c1c;                       /* red-700 */
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* Textarea size */
+.inventory-form textarea{
+  min-height: 110px;
+  resize: vertical;
+}
+
+/* Number inputs – hide spinners (optional) */
+.inventory-form input[type="number"]::-webkit-outer-spin-button,
+.inventory-form input[type="number"]::-webkit-inner-spin-button{
+  -webkit-appearance: none;
+  margin: 0;
+}
+.inventory-form input[type="number"]{ appearance: textfield; }
+
+/* Submit button */
+.inventory-form button[type="submit"]{
+  margin-top: 16px;
+  display:inline-block;
+  background: var(--accent);
+  color: #fff;
+  border: 0;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.inventory-form button[type="submit"]:hover{
+  background: var(--accent-dark);
+}
+
+/* Make form breathe a bit from the page edge */
+@media (min-width: 900px){
+  .inventory-form{ padding: 22px 22px; }
+}
+
+/* -------- Add Classification form -------- */
+/* Card */
+.classification-form{
+  max-width: 520px;
+  background: var(--panel);
+  border: 1px solid #e5e7eb;             /* slate-200 */
+  border-radius: 12px;
+  padding: 18px;
+  margin: 12px 0 24px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.06);
+}
+
+/* Hint text above the field */
+.classification-form .hint{
+  color:#6b7280;                          /* slate-500 */
+  font-size: 13px;
+  margin: 0 0 10px;
+}
+
+/* Labels */
+.classification-form label{
+  display:block;
+  font-weight:600;
+  margin-top: 8px;
+  margin-bottom:6px;
+}
+
+/* Input styling */
+.classification-form input[type="text"]{
+  width:100%;
+  padding:10px 12px;
+  border:1.5px solid #cbd5e1;             /* slate-300 */
+  border-radius:8px;
+  background:#f8fafc;                     /* slate-50 */
+  color:#111827;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+/* Focus ring */
+.classification-form input[type="text"]:focus{
+  outline:none;
+  border-color: var(--accent);
+  background:#fff;
+  box-shadow: 0 0 0 3px rgba(17,168,209,.15); /* accent glow */
+}
+
+/* Client/server error states */
+.classification-form input[type="text"]:invalid,
+.classification-form [aria-invalid="true"]{
+  border-color:#dc2626;                   /* red-600 */
+  box-shadow:0 0 0 2px rgba(220,38,38,.10);
+}
+
+.classification-form .field-error{
+  color:#b91c1c;                          /* red-700 */
+  font-size:13px;
+  margin-top:4px;
+}
+
+/* Submit button */
+.classification-form button[type="submit"]{
+  margin-top:14px;
+  display:inline-block;
+  background: var(--accent);
+  color:#fff;
+  border:0;
+  padding:10px 16px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+}
+.classification-form button[type="submit"]:hover{
+  background: var(--accent-dark);
+}
+
+/* Slightly larger padding on wide screens */
+@media (min-width: 900px){
+  .classification-form{ padding: 22px; }
+}

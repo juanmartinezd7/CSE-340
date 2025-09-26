@@ -1,0 +1,67 @@
+<!--views/inventory/add-inventory.ejs-->
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('../partials/head') %></head>
+<body class="checkerboard">
+  <div class="page">
+    <%- include('../partials/brandbar') %>
+    <%- include('../partials/navigation') %>
+
+    <main class="container main-content">
+      <h1>Add New Vehicle</h1>
+
+      <% if (typeof messages === 'function') { %>
+        <%- messages() %>
+      <% } %>
+
+      <form action="/inv/add-inventory" method="post" class="inventory-form">
+        <fieldset>
+          <legend>All fields are required.</legend>
+
+          <label for="classificationList">Classification</label>
+          <%- classificationList %>
+
+          <label for="inv_make">Make</label>
+          <input id="inv_make" name="inv_make" type="text" required
+                 value="<%= inv_make || '' %>">
+
+          <label for="inv_model">Model</label>
+          <input id="inv_model" name="inv_model" type="text" required
+                 value="<%= inv_model || '' %>">
+
+          <label for="inv_description">Description</label>
+          <textarea id="inv_description" name="inv_description" required><%= inv_description || '' %></textarea>
+
+          <label for="inv_image">Image Path</label>
+          <input id="inv_image" name="inv_image" type="text" required
+                 value="<%= inv_image || '/images/vehicles/no-image.png' %>">
+
+          <label for="inv_thumbnail">Thumbnail Path</label>
+          <input id="inv_thumbnail" name="inv_thumbnail" type="text" required
+                 value="<%= inv_thumbnail || '/images/vehicles/no-image.png' %>">
+
+          <label for="inv_price">Price</label>
+          <input id="inv_price" name="inv_price" type="number" min="0" step="0.01" required
+                 value="<%= inv_price || '' %>">
+
+          <label for="inv_year">Year</label>
+          <input id="inv_year" name="inv_year" type="text" pattern="^[0-9]{4}$" required
+                 title="4 digit year" value="<%= inv_year || '' %>">
+
+          <label for="inv_miles">Miles</label>
+          <input id="inv_miles" name="inv_miles" type="number" min="0" step="1" required
+                 value="<%= inv_miles || '' %>">
+
+          <label for="inv_color">Color</label>
+          <input id="inv_color" name="inv_color" type="text" required
+                 value="<%= inv_color || '' %>">
+        </fieldset>
+
+        <button type="submit">Add Vehicle</button>
+      </form>
+    </main>
+
+    <%- include('../partials/footer') %>
+  </div>
+</body>
+</html>

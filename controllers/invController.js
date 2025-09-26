@@ -49,4 +49,89 @@ invCont.buildByInvId = async function (req, res, next) {
 }
 
 
+/* Task 1: management view (GET /inv) */
+invCont.buildManagement = async function (req, res) {
+  res.render("inventory/management", { title: "Vehicle Management" })
+}
+
+/* Task 2: show add-classification form */
+invCont.buildAddClassification = async function (req, res) {
+  res.render("inventory/add-classification", {
+    title: "Add New Classification",
+    classification_name: ""
+  })
+}
+
+/* Task 2: handle add-classification POST */
+invCont.addClassification = async function (req, res, next) {
+  try {
+    const { classification_name } = req.body
+    const row = await invModel.addClassification(classification_name)
+    if (row?.classification_id) {
+      req.flash("notice", `“${classification_name}” added.`)
+      // rebuild nav immediately for this response
+      const nav = await utilities.getNav()
+      return res.status(201).render("inventory/management", {
+        title: "Vehicle Management",
+        nav
+      })
+    }
+    req.flash("notice", "Insert failed.")
+    res.status(500).render("inventory/add-classification", {
+      title: "Add New Classification",
+      classification_name
+    })
+  } catch (err) { next(err) }
+}
+
+/* Task 3: show add-inventory form */
+invCont.buildAddInventory = async function (req, res) {
+  const classificationList = await utilities.buildClassificationList()
+  res.render("inventory/add-inventory", {
+    title: "Add New Vehicle",
+    classificationList,
+    inv_make: "", inv_model: "", inv_year: "",
+    inv_description: "", inv_image: "/images/vehicles/no-image.png",
+    inv_thumbnail: "/images/vehicles/no-image.png",
+    inv_price: "", inv_miles: "", inv_color: ""
+  })
+}
+
+/* Task 3: handle add-inventory POST */
+invCont.addInventory = async function (req, res, next) {
+  try {
+    const payload = {
+      classification_id: Number(req.body.classification_id),
+      inv_make: req.body.inv_make,
+      inv_model: req.body.inv_model,
+      inv_year: req.body.inv_year,
+      inv_description: req.body.inv_description,
+      inv_image: req.body.inv_image,
+      inv_thumbnail: req.body.inv_thumbnail,
+      inv_price: Number(req.body.inv_price),
+      inv_miles: Number(req.body.inv_miles),
+      inv_color: req.body.inv_color
+    }
+
+    const row = await invModel.addVehicle(payload)
+    if (row?.inv_id) {
+      req.flash("notice", "Vehicle added.")
+      const nav = await utilities.getNav()
+      return res.status(201).render("inventory/management", {
+        title: "Vehicle Management",
+        nav
+      })
+    }
+
+    req.flash("notice", "Insert failed.")
+    const classificationList = await utilities.buildClassificationList(payload.classification_id)
+    res.status(500).render("inventory/add-inventory", {
+      title: "Add New Vehicle",
+      classificationList,
+      ...payload
+    })
+  } catch (err) { next(err) }
+}
+
+
 module.exports = invCont

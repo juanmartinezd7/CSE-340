@@ -57,6 +57,23 @@ Util.buildClassificationGrid = async function(data){
   return grid
 }
 
+
+/* Build <select> of classifications (sticky) */
+Util.buildClassificationList = async function (classification_id = null) {
+  const data = await invModel.getClassifications()
+  let select = '<select name="classification_id" id="classificationList" required>'
+  select += "<option value=''>Choose a Classification</option>"
+  data.rows.forEach(row => {
+    select += `<option value="${row.classification_id}"${
+      classification_id != null && String(row.classification_id) === String(classification_id)
+        ? " selected"
+        : ""
+    }>${row.classification_name}</option>`
+  })
+  select += "</select>"
+  return select
+}
+
 /* ****************************************
  * Middleware For Handling Errors
  * Wrap other function in this for 
