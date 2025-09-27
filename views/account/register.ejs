@@ -37,6 +37,7 @@
 <section class="register-card">
   <form action="/account/register" method="post" class="register-form">
     <div class="form-row">
+      <% const fnErr  = fieldErrors && fieldErrors.account_firstname; %>
       <label for="account_firstname">First name</label>
       <input
         id="account_firstname"
@@ -46,16 +47,15 @@
         minlength="2"
         pattern="^[A-Za-z][A-Za-z' -]*$"
         title="Only letters, apostrophes (’), spaces, and hyphens; must start with a letter."
-        autocomplete="given-name"
-        aria-invalid="<%= fieldErrors.account_firstname ? 'true' : 'false' %>"
-        aria-describedby="err_firstname"
+        <%= fnErr ? 'aria-invalid="true"' : '' %>
+        aria-describedby="<%= fnErr ? 'firstHelp err_firstname' : 'firstHelp' %>"
         value="<%= typeof account_firstname !== 'undefined' ? account_firstname : '' %>">
-      <% if (fieldErrors.account_firstname) { %>
-        <div class="field-error" id="err_firstname"><%= fieldErrors.account_firstname.msg %></div>
-      <% } %>
+      <small id="firstHelp" class="help">Letters, apostrophes, spaces, and hyphens only.</small>
+      <% if (fnErr) { %><div class="field-error" id="err_firstname" role="alert"><%= fieldErrors.account_firstname.msg %></div><% } %>
     </div>
 
     <div class="form-row">
+      <% const lnErr  = fieldErrors && fieldErrors.account_lastname; %>
       <label for="account_lastname">Last name</label>
       <input
         id="account_lastname"
@@ -65,16 +65,15 @@
         minlength="2"
         pattern="^[A-Za-z][A-Za-z' -]*$"
         title="Only letters, apostrophes (’), spaces, and hyphens; must start with a letter."
-        autocomplete="family-name"
-        aria-invalid="<%= fieldErrors.account_lastname ? 'true' : 'false' %>"
-        aria-describedby="err_lastname"
+        <%= lnErr ? 'aria-invalid="true"' : '' %>
+        aria-describedby="<%= lnErr ? 'lastHelp err_lastname' : 'lastHelp' %>"
         value="<%= typeof account_lastname !== 'undefined' ? account_lastname : '' %>">
-      <% if (fieldErrors.account_lastname) { %>
-        <div class="field-error" id="err_lastname"><%= fieldErrors.account_lastname.msg %></div>
-      <% } %>
+      <small id="lastHelp" class="help">Letters, apostrophes, spaces, and hyphens only.</small>
+      <% if (lnErr) { %><div class="field-error" id="err_lastname" role="alert"><%= fieldErrors.account_lastname.msg %></div><% } %>
     </div>
 
     <div class="form-row">
+      <% const emErr  = fieldErrors && fieldErrors.account_email; %>
       <label for="account_email">Email address</label>
       <input
         id="account_email"
@@ -83,36 +82,35 @@
         required
         autocomplete="email"
         inputmode="email"
-        aria-invalid="<%= fieldErrors.account_email ? 'true' : 'false' %>"
-        aria-describedby="err_email"
+        <%= emErr ? 'aria-invalid="true"' : '' %>
+        aria-describedby="<%= emErr ? 'regEmailHelp err_email' : 'regEmailHelp' %>"
         value="<%= typeof account_email !== 'undefined' ? account_email : '' %>">
-      <% if (fieldErrors.account_email) { %>
-        <div class="field-error" id="err_email"><%= fieldErrors.account_email.msg %></div>
-      <% } %>
+      <small id="regEmailHelp" class="help">We’ll send account info to this address.</small>
+      <% if (emErr) { %><div class="field-error" id="err_email" role="alert"><%= fieldErrors.account_email.msg %></div><% } %>
     </div>
 
     <div class="form-row">
+      <% const pwErr = fieldErrors && fieldErrors.account_password; %>
       <label for="account_password">Password</label>
       <div class="password-input">
-        <input
-          id="account_password"
-          name="account_password"
-          type="password"
-          required
-          minlength="12"
-          autocomplete="new-password"
-          aria-describedby="pwHelp err_password"
-          aria-invalid="<%= fieldErrors.account_password ? 'true' : 'false' %>"
-          pattern="(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}">
-        <button type="button" id="togglePassword" class="btn-secondary" aria-pressed="false" aria-controls="account_password">Show</button>
-      </div>
-      <small id="pwHelp" class="help">
-        Must be at least <strong>12</strong> characters and include
-        <strong>1</strong> uppercase letter, <strong>1</strong> number, and <strong>1</strong> special character.
-      </small>
-      <% if (fieldErrors.account_password) { %>
-        <div class="field-error" id="err_password"><%= fieldErrors.account_password.msg %></div>
-      <% } %>
+      <input
+        id="account_password"
+        name="account_password"
+        type="password"
+        required
+        minlength="12"
+        autocomplete="new-password"
+        pattern="(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{12,}"
+        <%= pwErr ? 'aria-invalid="true"' : '' %>
+        aria-describedby="<%= pwErr ? 'pwHelp err_password' : 'pwHelp' %>">
+      <button type="button" id="togglePassword" class="btn-secondary" aria-pressed="false" aria-controls="account_password">Show</button>
+    </div>
+    <small id="pwHelp" class="help">
+      At least 12 chars, with an uppercase letter, a number, and a symbol.
+    </small>
+    <% if (pwErr) { %>
+      <div class="field-error" id="err_password" role="alert"><%= fieldErrors.account_password.msg %></div>
+    <% } %>
     </div>
 
     <button type="submit" class="btn-register">Register</button>

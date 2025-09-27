@@ -34,6 +34,8 @@
 
         <section class="login-card">
           <form id="loginForm" action="/account/login" method="post" class="login-form">
+            <% const emailHasErr = fieldErrors && fieldErrors.account_email; %>
+
             <div class="form-row">
               <label for="account_email">Email address</label>
               <input
@@ -43,14 +45,18 @@
                 required
                 autocomplete="email"
                 inputmode="email"
-                aria-invalid="<%= fieldErrors.account_email ? 'true' : 'false' %>"
-                aria-describedby="err_email"
+                <%= emailHasErr ? 'aria-invalid="true"' : '' %>
+                aria-describedby="<%= emailHasErr ? 'loginEmailHelp err_email' : 'loginEmailHelp' %>"
                 value="<%= typeof account_email !== 'undefined' ? account_email : '' %>">
-              <% if (fieldErrors.account_email) { %>
-                <div class="field-error" id="err_email"><%= fieldErrors.account_email.msg %></div>
+
+              <small id="loginEmailHelp" class="help">Enter the email you registered with.</small>
+
+              <% if (emailHasErr) { %>
+                <div class="field-error" id="err_email" role="alert"><%= fieldErrors.account_email.msg %></div>
               <% } %>
             </div>
 
+            
 
             <div class="form-row">
               <label for="password">Password:</label>

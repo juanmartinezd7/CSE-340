@@ -436,9 +436,13 @@ body { margin: 0; font-family: Inter, system-ui, Arial, sans-serif; color: #1f29
 .btn-secondary:hover{ filter: brightness(.98); }
 
 .help{
-  color: #4b5563;
+  color: #000000;
   display: block;
   margin-top: 6px;
+}
+
+#loginEmailHelp{
+  color: #ffffff;
 }
 
 .btn-register{
