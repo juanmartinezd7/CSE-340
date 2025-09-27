@@ -443,7 +443,7 @@ body { margin: 0; font-family: Inter, system-ui, Arial, sans-serif; color: #1f29
 
 .btn-register{
   display: inline-block;
-  background: #1f73d2;                 /* blue pill button */
+  background: #221fd1;                 /* blue pill button */
   color: #fff;
   border: 0;
   border-radius: 999px;
@@ -486,7 +486,7 @@ input[aria-invalid="true"]{
 .inventory-form fieldset{ border: 0; margin: 0; padding: 0; }
 
 .inventory-form legend{
-  font-size: 14px; color: #6b7280; margin-bottom: 12px;
+  font-size: 14px; color: #0a0a0a; margin-bottom: 12px;
   text-transform: uppercase; letter-spacing: .02em;
 }
 
@@ -563,7 +563,7 @@ input[aria-invalid="true"]{
   margin-top: 16px;
   display:inline-block;
   background: var(--accent);
-  color: #fff;
+  color: #000000;
   border: 0;
   padding: 10px 16px;
   border-radius: 8px;
@@ -593,7 +593,7 @@ input[aria-invalid="true"]{
 
 /* Hint text above the field */
 .classification-form .hint{
-  color:#6b7280;                          /* slate-500 */
+  color:#0a0a0a;                          /* slate-500 */
   font-size: 13px;
   margin: 0 0 10px;
 }
@@ -643,7 +643,7 @@ input[aria-invalid="true"]{
   margin-top:14px;
   display:inline-block;
   background: var(--accent);
-  color:#fff;
+  color:#000000;
   border:0;
   padding:10px 16px;
   border-radius:8px;
