@@ -7,9 +7,4 @@ exports.noteReached = (req, res) => {
   res.send('You reached the controller (no error thrown).');
 };
 
-// Alt: controller-triggered error 
-// exports.trigger = (req, res, next) => {
-//   const err = new Error('Intentional 500 test (from controller)');
-//   err.status = 500;
-//   next(err);
-// };
+

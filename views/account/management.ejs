@@ -1,0 +1,27 @@
+<!--views/account/management.ejs-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head') %>
+  </head>
+  <body class="checkerboard">
+    <div class="page">
+      <%- include('../partials/brandbar') %>
+      <%- include('../partials/navigation') %>
+
+      <main class="container main-content">
+        <h1 class="page-title"><%= title %></h1>
+
+        <% if (typeof messages === 'function') { %>
+          <%- messages() %>
+        <% } %>
+
+        <!-- Content -->
+        <p>You're logged in.</p>
+      </main>
+
+      <%- include('../partials/footer') %>
+    </div>
+  </body>
+</html>

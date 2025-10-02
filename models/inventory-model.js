@@ -90,11 +90,48 @@ async function addVehicle({
   return r.rows[0]; // { inv_id: ... }
 }
 
+/* *****************************
+ *  Update a vehicle (by inv_id)
+ * *************************** */
+async function updateVehicle(v) {
+  // v is the payload you’re sending from the controller
+  const sql = `
+    UPDATE public.inventory
+       SET classification_id = $1,
+           inv_make         = $2,
+           inv_model        = $3,
+           inv_year         = $4,
+           inv_description  = $5,
+           inv_image        = $6,
+           inv_thumbnail    = $7,
+           inv_price        = $8,
+           inv_miles        = $9,
+           inv_color        = $10
+     WHERE inv_id = $11
+   RETURNING *;`
+  const values = [
+    v.classification_id,
+    v.inv_make,
+    v.inv_model,
+    String(v.inv_year),          // keep as string for CHAR(4)
+    v.inv_description,
+    v.inv_image,
+    v.inv_thumbnail,
+    Number(v.inv_price),
+    Number(v.inv_miles),
+    v.inv_color,
+    Number(v.inv_id)
+  ]
+  const result = await pool.query(sql, values)
+  return result.rows[0] || null
+}
+
 module.exports = {
   getClassifications,
   getInventoryByClassificationId,
   getVehicleByInvId,   
   addClassification,
   checkExistingClassificationName,
-  addVehicle           
+  addVehicle,
+  updateVehicle           
 }

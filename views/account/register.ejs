@@ -93,24 +93,25 @@
       <% const pwErr = fieldErrors && fieldErrors.account_password; %>
       <label for="account_password">Password</label>
       <div class="password-input">
-      <input
-        id="account_password"
-        name="account_password"
-        type="password"
-        required
-        minlength="12"
-        autocomplete="new-password"
-        pattern="(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{12,}"
-        <%= pwErr ? 'aria-invalid="true"' : '' %>
-        aria-describedby="<%= pwErr ? 'pwHelp err_password' : 'pwHelp' %>">
-      <button type="button" id="togglePassword" class="btn-secondary" aria-pressed="false" aria-controls="account_password">Show</button>
-    </div>
-    <small id="pwHelp" class="help">
-      At least 12 chars, with an uppercase letter, a number, and a symbol.
-    </small>
-    <% if (pwErr) { %>
-      <div class="field-error" id="err_password" role="alert"><%= fieldErrors.account_password.msg %></div>
-    <% } %>
+        <input
+          id="account_password"
+          name="account_password"
+          type="password"
+          required
+          minlength="12"
+          autocomplete="new-password"
+          pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}$"
+          <%= pwErr ? 'aria-invalid="true"' : '' %>
+          aria-describedby="<%= pwErr ? 'pwHelp err_password' : 'pwHelp' %>">
+        <button type="button" id="togglePassword" class="btn-secondary" aria-pressed="false" aria-controls="account_password">Show</button>
+      </div>
+      <small id="pwHelp" class="help">
+        At least 12 chars, with an uppercase letter, a number, and a symbol.
+      </small>
+      <% if (pwErr) { %>
+        <div class="field-error" id="err_password" role="alert"><%= fieldErrors.account_password.msg %></div>
+      <% } %>
+
     </div>
 
     <button type="submit" class="btn-register">Register</button>

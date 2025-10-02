@@ -1,4 +1,4 @@
-<!--views/inventory/management.ejs-->
+<!-- views/inventory/management.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head><%- include('../partials/head') %></head>
@@ -16,9 +16,25 @@
 
       <p><a href="/inv/add-classification">Add New Classification</a></p>
       <p><a href="/inv/add-inventory">Add New Vehicle</a></p>
+
+      <h2>Manage Inventory</h2>
+      <p>Select a Classification from the list</p>
+
+      <form id="manageSelect" class="manage-select" onsubmit="return false;">
+        <%- classificationList %>
+        <noscript><button type="submit">Go</button></noscript>
+      </form>
+
+      <div class="table-scroll">
+        <table id="inventoryDisplay" class="inventory-table"></table>
+      </div>
+
+      <noscript>JavaScript must be enabled to use this page.</noscript>
     </main>
 
     <%- include('../partials/footer') %>
   </div>
+
+  <script defer src="/js/inventory.js"></script>
 </body>
 </html>

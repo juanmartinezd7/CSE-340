@@ -662,3 +662,95 @@ input[aria-invalid="true"]{
 @media (min-width: 900px){
   .classification-form{ padding: 22px; }
 }
+
+/* ---------- Inventory Management ---------- */
+
+/* Classification dropdown */
+.manage-select { margin: 10px 0 16px; }
+.manage-select #classificationList{
+  appearance: none;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  min-width: 260px;
+}
+.manage-select #classificationList:focus{
+  outline: none;
+  border-color: var(--panel-border);
+  box-shadow: 0 0 0 3px rgba(52,179,214,.25);
+}
+
+/* Scroll wrapper to avoid layout break on small screens */
+.table-scroll{ overflow-x: auto; }
+
+/* Table */
+.inventory-table{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 6px 14px rgba(0,0,0,.04);
+}
+.inventory-table thead th{
+  background: #f8fafc;
+  color: #111827;
+  font-weight: 700;
+  font-size: 14px;
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid #e5e7eb;
+}
+.inventory-table tbody td{
+  padding: 12px 14px;
+  border-top: 1px solid #eef2f7;
+  vertical-align: middle;
+}
+.inventory-table tbody tr:nth-child(even) td{ background: #fbfdff; }
+.inventory-table tbody tr:hover td{ background: #f1fbff; }
+
+/* Actions column */
+.inventory-table th.actions,
+.inventory-table td.actions{
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Action buttons */
+.btn-small{
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 700;
+  border: 1px solid transparent;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.btn-small.modify{
+  background: var(--accent);
+  color: #fff;
+}
+.btn-small.modify:hover{ background: var(--accent-dark); }
+
+.btn-small.delete{
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+.btn-small.delete:hover{ background: #fecaca; }
+
+/* Hint rows (loading/empty) */
+.inventory-table .hint-row td{
+  text-align: center;
+  color: #6b7280;
+  padding: 16px;
+}
+
+/* Small screens */
+@media (max-width: 640px){
+  .inventory-table{ font-size: 14px; }
+  .btn-small{ padding: 5px 8px; }
+}

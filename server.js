@@ -13,6 +13,7 @@ const app = express();
 const utilities = require('./utilities');
 const errorRoutes = require('./routes/errorRoute');
 const bodyParser = require("body-parser")
+const cookieParser = require("cookie-parser")
 
 /* ***********************
  * Middleware
@@ -34,6 +35,8 @@ app.use(function(req, res, next){
   res.locals.messages = require('express-messages')(req, res)
   next()
 })
+
+app.use(cookieParser())
 
 
 // View engine

@@ -74,12 +74,25 @@ Util.buildClassificationList = async function (classification_id = null) {
   return select
 }
 
+
+
 /* ****************************************
  * Middleware For Handling Errors
- * Wrap other function in this for 
- * General Error Handling
+ * Wrap other function in this for General Error Handling
  **************************************** */
-Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
+
+Util.handleErrors = (fn) => (req, res, next) => {
+  if (typeof fn !== "function") {
+    return next(
+      new Error(
+        `handleErrors expected a function but got "${typeof fn}" for route ${req.originalUrl}`
+      )
+    );
+  }
+  Promise.resolve(fn(req, res, next)).catch(next);
+};
 
 
-module.exports = Util
+
+
+module.exports = Util;

@@ -58,4 +58,55 @@ invValidate.checkVehicle = async (req, res, next) => {
   next()
 }
 
+
+/* ---------- Edit-inventory: validate update and return to EDIT view on error ---------- */
+invValidate.checkUpdateData = async (req, res, next) => {
+  const result = validationResult(req)
+  if (!result.isEmpty()) {
+    // Flash each error (optional – keeps your UI consistent with other forms)
+    result.array().forEach(e => req.flash("notice", e.msg))
+
+    // Pull all fields (including inv_id) from the request body
+    const {
+      inv_id,
+      classification_id,
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_miles,
+      inv_color
+    } = req.body
+
+    // Rebuild the classification <select> with current selection
+    const classificationList = await utilities.buildClassificationList(classification_id)
+
+    // Match the controller’s edit title convention: "Edit Make Model"
+    const itemName = `${inv_make || ""} ${inv_model || ""}`.trim()
+    const title = itemName ? `Edit ${itemName}` : "Edit Vehicle"
+
+    // Render the EDIT view (not the add view), with sticky values
+    return res.status(400).render("inventory/edit-inventory", {
+      title,
+      classificationList,
+      errors: result.mapped(),  // if your view reads field errors
+      inv_id,
+      classification_id,
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_miles,
+      inv_color
+    })
+  }
+  next()
+}
+
 module.exports = invValidate
