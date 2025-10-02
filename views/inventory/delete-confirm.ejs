@@ -1,0 +1,51 @@
+<!-- views/inventory/delete-confirm.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('../partials/head') %></head>
+<body class="checkerboard">
+  <div class="page">
+    <%- include('../partials/brandbar') %>
+    <%- include('../partials/navigation') %>
+
+    <main class="container main-content">
+      <h1><%= title %></h1>
+
+      <% if (typeof messages === 'function') { %>
+        <%- messages() %>
+      <% } %>
+
+      <p class="notice warning">Confirm Deletion — The delete is permanent and cannot be undone.</p>
+
+      <form action="/inv/delete" method="post" class="delete-form" novalidate>
+        <input type="hidden" name="inv_id" value="<%= inv_id %>">
+
+        <div class="form-row">
+          <label for="inv_make">Make</label>
+          <input id="inv_make" name="inv_make" type="text" value="<%= inv_make %>" readonly>
+        </div>
+
+        <div class="form-row">
+          <label for="inv_model">Model</label>
+          <input id="inv_model" name="inv_model" type="text" value="<%= inv_model %>" readonly>
+        </div>
+
+        <div class="form-row">
+          <label for="inv_year">Year</label>
+          <input id="inv_year" name="inv_year" type="text" value="<%= inv_year %>" readonly>
+        </div>
+
+        <div class="form-row">
+          <label for="inv_price">Price</label>
+          <input id="inv_price" name="inv_price" type="text" value="<%= inv_price %>" readonly>
+        </div>
+
+        <button type="submit" class="btn-danger">Delete Vehicle</button>
+        <a href="/inv" class="btn-secondary">Cancel</a>
+      </form>
+    </main>
+
+    <%- include('../partials/footer') %>
+  </div>
+</body>
+</html>
+

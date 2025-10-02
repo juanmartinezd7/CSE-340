@@ -270,6 +270,86 @@ invCont.updateInventory = async function (req, res, next) {
   } catch (err) { next(err) }
 }
 
+
+/* ***************************
+ *  Build & deliver delete confirmation view
+ *  GET /inv/delete/:inv_id
+ * ************************** */
+invCont.buildDeleteInventory = async function (req, res, next) {
+  try {
+    // Collect the id from the URL
+    const inv_id = parseInt(req.params.inv_id, 10)
+    if (!Number.isInteger(inv_id)) {
+      return next({ status: 400, message: "Invalid vehicle id." })
+    }
+
+    // Build nav for the view
+    const nav = await utilities.getNav()
+
+    // Fetch this inventory item
+    const itemData = await (
+      invModel.getInventoryById
+        ? invModel.getInventoryById(inv_id)
+        : invModel.getVehicleByInvId(inv_id) // fallback if your model uses this name
+    )
+
+    if (!itemData) {
+      return next({ status: 404, message: "Vehicle not found." })
+    }
+
+    // Make + Model for title/h1
+    const itemName = `${itemData.inv_make} ${itemData.inv_model}`
+
+    // Render the delete confirmation view
+    return res.render("inventory/delete-confirm", {
+      title: `Delete ${itemName}`,
+      nav,
+      errors: null,
+
+      // inputs for the form (read-only in the EJS)
+      inv_id: itemData.inv_id,
+      inv_make: itemData.inv_make,
+      inv_model: itemData.inv_model,
+      inv_year: String(itemData.inv_year ?? "").trim(),
+      inv_price: itemData.inv_price
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+/* -----------------------------
+ *  Delete inventory (submit)
+ *  POST /inv/delete
+ * ----------------------------- */
+invCont.deleteInventory = async function (req, res, next) {
+  try {
+    // collect inv_id from the posted form
+    const inv_id = parseInt(req.body.inv_id, 10)
+    if (!Number.isInteger(inv_id)) {
+      req.flash("notice", "Invalid vehicle id.")
+      return res.redirect("/inv/")
+    }
+
+    // ask the model to delete this vehicle
+    const deleted = await invModel.deleteVehicle(inv_id) // you'll build this in the model next
+
+    if (deleted) {
+      // success → back to management with a success flash
+      req.flash("notice", "Vehicle deleted.")
+      return res.redirect("/inv/")
+    }
+
+    // failure → flash and rebuild the same delete view
+    req.flash("notice", "Delete failed. Please try again.")
+    return res.redirect(`/inv/delete/${inv_id}`)
+  } catch (err) {
+    next(err)
+  }
+}
+
+
+
 module.exports = {
   buildManagement:         invCont.buildManagement,
   buildByClassificationId: invCont.buildByClassificationId,
@@ -281,5 +361,7 @@ module.exports = {
   buildEditInventory:      invCont.buildEditInventory,
   getInventoryJSON:        invCont.getInventoryJSON,
   updateInventory:         invCont.updateInventory,
+  buildDeleteInventory:    invCont.buildDeleteInventory,
+  deleteInventory:         invCont.deleteInventory,
 };
 

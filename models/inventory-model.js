@@ -126,6 +126,15 @@ async function updateVehicle(v) {
   return result.rows[0] || null
 }
 
+
+//function to handle the delete call in the database
+async function deleteVehicle(inv_id) {
+  const sql = "DELETE FROM public.inventory WHERE inv_id = $1"
+  const r = await pool.query(sql, [inv_id])
+  return r.rowCount > 0
+}
+
+
 module.exports = {
   getClassifications,
   getInventoryByClassificationId,
@@ -133,5 +142,6 @@ module.exports = {
   addClassification,
   checkExistingClassificationName,
   addVehicle,
-  updateVehicle           
+  updateVehicle,
+  deleteVehicle,           
 }

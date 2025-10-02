@@ -59,6 +59,19 @@ router.post(
   utilities.handleErrors(invController.updateInventory)
 );
 
+// Delete inventory (confirmation screen)
+router.get(
+  "/delete/:inv_id",                    // e.g., /inv/delete/42
+  utilities.handleErrors(invController.buildDeleteInventory)
+);
+
+// Delete inventory (perform delete)
+router.post(
+  "/delete",                            // form will POST to /inv/delete
+  utilities.handleErrors(invController.deleteInventory)
+);
+
+
 // JSON for management table
 router.get(
   "/getInventory/:classification_id",

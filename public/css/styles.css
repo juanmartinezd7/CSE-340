@@ -494,12 +494,6 @@ input[aria-invalid="true"]{
   text-transform: uppercase; letter-spacing: .02em;
 }
 
-.inventory-form label{
-  display:block;
-  font-weight: 600;
-  margin-top: 12px;
-  margin-bottom: 6px;
-}
 
 /* Inputs, selects, textareas look the same */
 .inventory-form input[type="text"],
@@ -581,6 +575,106 @@ input[aria-invalid="true"]{
 /* Make form breathe a bit from the page edge */
 @media (min-width: 900px){
   .inventory-form{ padding: 22px 22px; }
+}
+
+/*Inventory form
+/* add-inventory view
+/* -------- Add Inventory form -------- */
+.delete-form{
+  background: var(--panel);
+  border: 1px solid #e5e7eb;         /* subtle border */
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.06);
+}
+
+.delete-form fieldset{ border: 0; margin: 0; padding: 0; }
+
+.delete-form legend{
+  font-size: 14px; color: #0a0a0a; margin-bottom: 12px;
+  text-transform: uppercase; letter-spacing: .02em;
+}
+
+
+/* Inputs, selects, textareas look the same */
+.delete-form input[type="text"],
+.delete-form input[type="number"],
+.delete-form input[type="email"],
+.delete-form input[type="url"],
+.delete-form input[type="tel"],
+.delete-form select,
+.delete-form textarea{
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #cbd5e1;       /* slate-300 */
+  border-radius: 8px;
+  background: #f8fafc;               /* slate-50 */
+  color: #111827;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+/* Classification dropdown id from your utilities builder */
+#classificationList{
+  width: 100%;
+}
+
+/* Focus ring */
+.delete-form input:focus,
+.delete-form select:focus,
+.delete-form textarea:focus{
+  outline: none;
+  border-color: var(--accent);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(17,168,209,.15);  /* accent glow */
+}
+
+/* Error state (server or client) */
+.delete-form [aria-invalid="true"],
+.delete-form input:invalid,
+.delete-form select:invalid,
+.delete-form textarea:invalid{
+  border-color: #dc2626;              /* red-600 */
+  box-shadow: 0 0 0 2px rgba(220,38,38,.10);
+}
+
+.delete-form .field-error{
+  color:#b91c1c;                       /* red-700 */
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* Textarea size */
+.delete-form textarea{
+  min-height: 110px;
+  resize: vertical;
+}
+
+/* Number inputs – hide spinners (optional) */
+.delete-form input[type="number"]::-webkit-outer-spin-button,
+.delete-form input[type="number"]::-webkit-inner-spin-button{
+  -webkit-appearance: none;
+  margin: 0;
+}
+.delete-form input[type="number"]{ appearance: textfield; }
+
+/* Submit button */
+.delete-form button[type="submit"]{
+  margin-top: 16px;
+  display:inline-block;
+  background: var(--accent);
+  color: #000000;
+  border: 0;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.delete-form button[type="submit"]:hover{
+  background: var(--accent-dark);
+}
+/* Make form breathe a bit from the page edge */
+@media (min-width: 900px){
+  .delete-form{ padding: 22px 22px; }
 }
 
 /* -------- Add Classification form -------- */
