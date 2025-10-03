@@ -1,5 +1,4 @@
 <!--views/account/management.ejs-->
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,11 +16,32 @@
           <%- messages() %>
         <% } %>
 
-        <!-- Content -->
-        <p>You're logged in.</p>
+        <% const acct = locals.account; %>
+
+        <% if (!acct) { %>
+          <!-- Fallback if someone reaches this view without a JWT -->
+          <p>Please <a href="/account/login">log in</a> to view your account.</p>
+        <% } else { %>
+          <!-- Greet by first name -->
+          <h2>Welcome <%= acct.account_firstname %></h2>
+
+          <!-- Update link (visible to ALL) -->
+          <p class="mt-2">
+            <a href="/account/update/<%= acct.account_id %>">Update account information</a>
+          </p>
+
+          <!-- Admin/Employee-only block -->
+          <% if (acct.account_type === 'Employee' || acct.account_type === 'Admin') { %>
+            <h3 class="mt-4">Inventory Management</h3>
+            <p>
+              <a href="/inv/">Go to Inventory Management</a>
+            </p>
+          <% } %>
+        <% } %>
       </main>
 
       <%- include('../partials/footer') %>
     </div>
   </body>
 </html>
+

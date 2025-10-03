@@ -1,0 +1,172 @@
+<!-- views/account/update.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head') %>
+  </head>
+  <body class="checkerboard">
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <div class="page">
+      <%- include('../partials/brandbar') %>
+      <%- include('../partials/navigation') %>
+
+      <main id="main" class="container main-content auth-screen">
+        <h1 class="page-title"><%= title %></h1>
+
+        <!-- Flash messages -->
+        <% if (typeof messages === 'function') { %>
+          <%- messages() %>
+        <% } %>
+
+        <% 
+          const hasErrors = typeof errors !== 'undefined' && errors && Object.keys(errors).length > 0;
+          const e = hasErrors ? errors : {};
+          // Handy fallbacks: use locals passed in OR the logged-in user from res.locals.account
+          const FIRST = (typeof account_firstname !== 'undefined') ? account_firstname : (locals.account?.account_firstname || '');
+          const LAST  = (typeof account_lastname  !== 'undefined') ? account_lastname  : (locals.account?.account_lastname  || '');
+          const EMAIL = (typeof account_email     !== 'undefined') ? account_email     : (locals.account?.account_email     || '');
+          const AID   = (typeof account_id        !== 'undefined') ? account_id        : (locals.account?.account_id        || '');
+        %>
+
+        <!-- Error summary (optional; server fills "errors" as a map { field: { msg } }) -->
+        <% if (hasErrors) { %>
+          <ul class="notice">
+            <% Object.values(e).forEach(err => { %>
+              <li><%= err.msg %></li>
+            <% }) %>
+          </ul>
+        <% } %>
+
+        <!-- =============== Account Update =============== -->
+        <section class="card-section">
+          <h2>Account Update</h2>
+          <form action="/account/update" method="post" class="register-form" autocomplete="off" novalidate>
+            <input type="hidden" name="account_id" value="<%= AID %>">
+
+            <div class="form-row">
+              <label for="account_firstname">First name</label>
+              <input
+                id="account_firstname"
+                name="account_firstname"
+                type="text"
+                required
+                minlength="2"
+                pattern="^[A-Za-z][A-Za-z' -]*$"
+                title="Only letters, apostrophes (’), spaces, and hyphens; must start with a letter."
+                value="<%= FIRST %>"
+                aria-invalid="<%= e.account_firstname ? 'true' : 'false' %>"
+                aria-describedby="<%= e.account_firstname ? 'help_fn err_fn' : 'help_fn' %>">
+              <small id="help_fn" class="help">Letters, apostrophes, spaces, and hyphens only.</small>
+              <% if (e.account_firstname) { %>
+                <div class="field-error" id="err_fn" role="alert"><%= e.account_firstname.msg %></div>
+              <% } %>
+            </div>
+
+            <div class="form-row">
+              <label for="account_lastname">Last name</label>
+              <input
+                id="account_lastname"
+                name="account_lastname"
+                type="text"
+                required
+                minlength="2"
+                pattern="^[A-Za-z][A-Za-z' -]*$"
+                title="Only letters, apostrophes (’), spaces, and hyphens; must start with a letter."
+                value="<%= LAST %>"
+                aria-invalid="<%= e.account_lastname ? 'true' : 'false' %>"
+                aria-describedby="<%= e.account_lastname ? 'help_ln err_ln' : 'help_ln' %>">
+              <small id="help_ln" class="help">Letters, apostrophes, spaces, and hyphens only.</small>
+              <% if (e.account_lastname) { %>
+                <div class="field-error" id="err_ln" role="alert"><%= e.account_lastname.msg %></div>
+              <% } %>
+            </div>
+
+            <div class="form-row">
+              <label for="account_email">Email address</label>
+              <input
+                id="account_email"
+                name="account_email"
+                type="email"
+                required
+                autocomplete="email"
+                inputmode="email"
+                value="<%= EMAIL %>"
+                aria-invalid="<%= e.account_email ? 'true' : 'false' %>"
+                aria-describedby="<%= e.account_email ? 'help_em err_em' : 'help_em' %>">
+              <small id="help_em" class="help">We’ll send account info to this address.</small>
+              <% if (e.account_email) { %>
+                <div class="field-error" id="err_em" role="alert"><%= e.account_email.msg %></div>
+              <% } %>
+            </div>
+
+            <button type="submit" class="btn-primary">Save Changes</button>
+          </form>
+        </section>
+
+        <!-- =============== Change Password =============== -->
+        <section class="card-section">
+          <h2>Change Password</h2>
+          <p class="help">
+            Entering a new password will replace your current password.
+            It must be at least <strong>12</strong> characters and include
+            <strong>1</strong> uppercase letter, <strong>1</strong> number, and
+            <strong>1</strong> special character.
+          </p>
+
+          <form action="/account/update-password" method="post" class="register-form" autocomplete="off" novalidate>
+            <input type="hidden" name="account_id" value="<%= AID %>">
+
+            <div class="form-row">
+              <label for="account_password">New password</label>
+              <div class="password-input">
+                <input
+                  id="account_password"
+                  name="account_password"
+                  type="password"
+                  required
+                  minlength="12"
+                  autocomplete="new-password"
+                  pattern="(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{12,}"
+                  aria-invalid="<%= e.account_password ? 'true' : 'false' %>"
+                  aria-describedby="<%= e.account_password ? 'pwHelp err_pw' : 'pwHelp' %>">
+                <button type="button" id="togglePassword" class="btn-secondary" aria-pressed="false" aria-controls="account_password">Show</button>
+              </div>
+              <small id="pwHelp" class="help">At least 12 chars, with an uppercase letter, a number, and a symbol.</small>
+              <% if (e.account_password) { %>
+                <div class="field-error" id="err_pw" role="alert"><%= e.account_password.msg %></div>
+              <% } %>
+            </div>
+
+            <button type="submit" class="btn-primary">Update Password</button>
+          </form>
+        </section>
+      </main>
+
+      <%- include('../partials/footer') %>
+    </div>
+
+    <script>
+      // Show/hide password
+      (function () {
+        const input = document.getElementById('account_password');
+        const btn = document.getElementById('togglePassword');
+        if (!input || !btn) return;
+        btn.addEventListener('click', () => {
+          const isPwd = input.type === 'password';
+          input.type = isPwd ? 'text' : 'password';
+          btn.textContent = isPwd ? 'Hide' : 'Show';
+          btn.setAttribute('aria-pressed', String(isPwd));
+        });
+      }());
+      // Soft client-side filtering for names
+      (function () {
+        function filterName(el){ el.value = el.value.replace(/[^A-Za-z' -]/g, ''); }
+        ['account_firstname','account_lastname'].forEach(id => {
+          const input = document.getElementById(id);
+          if (input) input.addEventListener('input', () => filterName(input));
+        });
+      }());
+    </script>
+  </body>
+</html>

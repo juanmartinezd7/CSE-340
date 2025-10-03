@@ -77,4 +77,96 @@ function prettyLabel(param){
   }
 }
 
+
+/* -------------------------------------------
+ * Update account (names + email) - validation
+ * ------------------------------------------ */
+validate.updateAccountRules = () => ([
+  body('account_id')
+    .toInt()
+    .isInt({ gt: 0 }).withMessage('Invalid account id.'),
+
+  body('account_firstname')
+    .trim()
+    .notEmpty().withMessage('First name is required.')
+    .isLength({ min: 2 }).withMessage('First name must be at least 2 characters.')
+    .matches(/^[A-Za-z][A-Za-z' -]*$/).withMessage("First name: letters, apostrophe, space, hyphen only."),
+
+  body('account_lastname')
+    .trim()
+    .notEmpty().withMessage('Last name is required.')
+    .isLength({ min: 2 }).withMessage('Last name must be at least 2 characters.')
+    .matches(/^[A-Za-z][A-Za-z' -]*$/).withMessage("Last name: letters, apostrophe, space, hyphen only."),
+
+  body('account_email')
+    .trim()
+    .notEmpty().withMessage('Email is required.')
+    .isEmail().withMessage('Enter a valid email.')
+    .normalizeEmail()
+    .custom(async (email, { req }) => {
+      const aid = Number(req.body.account_id);
+      // If unchanged (same as DB), allow it. If changed, must be unique.
+      const current = await accountModel.getAccountById(aid);
+      if (!current) throw new Error('Account not found.');
+      if (current.account_email.toLowerCase() === email.toLowerCase()) return true;
+
+      const taken = await accountModel.checkExistingEmail(email);
+      if (taken) throw new Error('That email is already registered.');
+      return true;
+    })
+]);
+
+validate.checkUpdateAccountFlash = async (req, res, next) => {
+  const result = validationResult(req);
+  if (!result.isEmpty()) {
+    const mapped = result.mapped();
+    // flash each error (optional)
+    result.array().forEach(err => req.flash('notice', err.msg));
+    return res.status(400).render('account/update', {
+      title: 'Update Account',
+      errors: mapped,
+      account_id: req.body.account_id,
+      account_firstname: req.body.account_firstname,
+      account_lastname:  req.body.account_lastname,
+      account_email:     req.body.account_email
+    });
+  }
+  next();
+};
+
+/* ------------------------
+ * Update password - rules
+ * ----------------------- */
+validate.updatePasswordRules = () => ([
+  body('account_id')
+    .toInt()
+    .isInt({ gt: 0 }).withMessage('Invalid account id.'),
+
+  body('account_password')
+    .trim()
+    .notEmpty().withMessage('Password is required.')
+    .matches(/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}$/)
+    .withMessage('Password must be 12+ chars, include 1 uppercase, 1 number, and 1 special character.')
+]);
+
+validate.checkUpdatePasswordFlash = async (req, res, next) => {
+  const result = validationResult(req);
+  if (!result.isEmpty()) {
+    const mapped = result.mapped();
+    result.array().forEach(err => req.flash('notice', err.msg));
+    // re-render update view; keep sticky name/email too if present in locals
+    const user = await accountModel.getAccountById(Number(req.body.account_id));
+    return res.status(400).render('account/update', {
+      title: 'Update Account',
+      errors: mapped,
+      account_id: user?.account_id,
+      account_firstname: user?.account_firstname || '',
+      account_lastname:  user?.account_lastname  || '',
+      account_email:     user?.account_email     || ''
+    });
+  }
+  next();
+};
+
+
 module.exports = validate;

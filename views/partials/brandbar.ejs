@@ -1,9 +1,23 @@
 <!--views/partials/brandbar.ejs-->
-
 <header class="app-header">
   <div class="container topbar">
-    <h1 class="brand"><a class="brand-link" href="/">CSE Motors</a></h1>
-    <a class="account" href="/account">My Account</a>   <!-- absolute path -->
+    <h1 class="brand">
+      <a class="brand-link" href="/">CSE Motors</a>
+    </h1>
+
+    <div class="auth-links">
+      <% if (account) { %>
+        <span class="welcome-link">
+          Welcome <a href="/account"><%= account.account_firstname %></a>
+        </span>
+        <form action="/account/logout" method="post" class="logout-form">
+          <button type="submit" class="account logout-btn">Logout</button>
+        </form>
+      <% } else { %>
+        <a class="account" href="/account/login">My Account</a>
+      <% } %>
+    </div>
   </div>
 </header>
+
 

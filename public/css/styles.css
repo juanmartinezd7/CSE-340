@@ -848,3 +848,22 @@ input[aria-invalid="true"]{
   .inventory-table{ font-size: 14px; }
   .btn-small{ padding: 5px 8px; }
 }
+
+/*makes the logout button look like a link <!-- views/partials/header.ejs -->:*/
+.auth-links { display:flex; align-items:center; gap:12px; }
+.logout-form { display:inline; margin:0; }
+.logout-btn {
+  background: none; border: none; padding: 0;
+  font: inherit; color: inherit; cursor: pointer; text-decoration: underline;
+}
+.welcome-link a { font-weight: 600; text-decoration: none; }
+
+/*makes the logout button look like a link in the views/partials/brandbar.ejs:*/
+.auth-links { display:flex; align-items:center; gap:12px; }
+.logout-form { display:inline; margin:0; }
+.logout-btn {
+  background:none; border:none; padding:0;
+  font:inherit; color:inherit; cursor:pointer; text-decoration:underline;
+}
+.welcome-link a { font-weight:600; text-decoration:none; }
+

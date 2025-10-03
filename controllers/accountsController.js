@@ -114,10 +114,155 @@ async function accountLogin(req, res, next) {
   }
 }
 
+// render the view and set a title
+async function buildManagement(req, res) {
+  res.render('account/management', { title: 'Account Management' });
+}
+
+async function buildUpdateAccount(req, res) {
+  // basic shell; flesh out later
+  res.render('account/update', { title: 'Update Account' });
+}
+
+/* -----------------------------------
+ * Deliver the Account Update view
+ * GET /account/update/:account_id
+ * ---------------------------------- */
+async function buildUpdateView(req, res) {
+  const account_id = parseInt(req.params.account_id, 10);
+  const user = await accountModel.getAccountById(account_id);
+  if (!user) {
+    req.flash('notice', 'Account not found.');
+    return res.redirect('/account');
+  }
+
+  return res.render('account/update', {
+    title: 'Update Account',
+    errors: {},
+    account_id: user.account_id,
+    account_firstname: user.account_firstname,
+    account_lastname:  user.account_lastname,
+    account_email:     user.account_email
+  });
+}
+
+/* -----------------------------------
+ * Handle Account (names/email) update
+ * POST /account/update
+ * ---------------------------------- */
+async function updateAccount(req, res, next) {
+  try {
+    const { account_id, account_firstname, account_lastname, account_email } = req.body;
+    const ok = await accountModel.updateAccount({
+      account_id: Number(account_id),
+      account_firstname,
+      account_lastname,
+      account_email
+    });
+
+    if (!ok) {
+      req.flash('notice', 'Update failed. Please try again.');
+      // re-render update with sticky values
+      return res.status(500).render('account/update', {
+        title: 'Update Account',
+        errors: {},
+        account_id,
+        account_firstname,
+        account_lastname,
+        account_email
+      });
+    }
+
+    // Re-query the updated user
+    const fresh = await accountModel.getAccountById(Number(account_id));
+
+    // Optional: refresh JWT so header/welcome uses new name/email on next requests
+    try {
+      const old = res.locals.account || {};
+      const payload = {
+        ...old,
+        account_id: fresh.account_id,
+        account_firstname: fresh.account_firstname,
+        account_lastname: fresh.account_lastname,
+        account_email: fresh.account_email,
+        account_type: fresh.account_type
+      };
+      const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 });
+      res.cookie('jwt', token, { httpOnly: true, secure: process.env.NODE_ENV !== 'development', maxAge: 3600 * 1000 });
+      res.locals.account = payload; // so the render right now shows updated data
+    } catch (_) {}
+
+    req.flash('notice', 'Account information updated.');
+    return res.render('account/management', {
+      title: 'Account Management'
+      // management.ejs reads res.locals.account & messages()
+    });
+  } catch (err) { next(err); }
+}
+
+/* -----------------------------
+ * Handle Password change
+ * POST /account/update-password
+ * ---------------------------- */
+async function updatePassword(req, res, next) {
+  try {
+    const account_id = Number(req.body.account_id);
+    const plain = req.body.account_password;
+
+    // validation middleware already checked strength; just hash and save
+    const hash = bcrypt.hashSync(plain, 10);
+    const ok = await accountModel.updatePassword(account_id, hash);
+
+    if (!ok) {
+      req.flash('notice', 'Password update failed. Please try again.');
+      const user = await accountModel.getAccountById(account_id);
+      return res.status(500).render('account/update', {
+        title: 'Update Account',
+        errors: {},
+        account_id: user?.account_id,
+        account_firstname: user?.account_firstname || '',
+        account_lastname:  user?.account_lastname  || '',
+        account_email:     user?.account_email     || ''
+      });
+    }
+
+    req.flash('notice', 'Password updated successfully.');
+    // No need to refresh JWT unless you include password (you shouldn’t)
+    // Show management with success
+    const fresh = await accountModel.getAccountById(account_id);
+    res.locals.account = {
+      account_id: fresh.account_id,
+      account_firstname: fresh.account_firstname,
+      account_lastname: fresh.account_lastname,
+      account_email: fresh.account_email,
+      account_type: fresh.account_type
+    };
+
+    return res.render('account/management', {
+      title: 'Account Management'
+    });
+  } catch (err) { next(err); }
+}
+
+// POST /account/logout
+async function logout(req, res) {
+  // remove the JWT cookie
+  res.clearCookie('jwt', { httpOnly: true, secure: process.env.NODE_ENV !== 'development' });
+  req.flash?.('notice', 'You have been logged out.');
+  return res.redirect('/'); // <-- go back to the home view
+}
+
+
 module.exports = {
   buildLogin,
   buildRegister,
-  buildAccount,       // NEW
+  buildAccount,       
   registerAccount,
-  accountLogin        // renamed for clarity
+  accountLogin,   
+  buildManagement,   
+  buildUpdateAccount,  
+  buildUpdateView,
+  updateAccount,
+  updatePassword,
+  logout
 };

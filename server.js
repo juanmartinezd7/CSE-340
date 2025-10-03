@@ -12,8 +12,9 @@ const path = require('path');
 const app = express();
 const utilities = require('./utilities');
 const errorRoutes = require('./routes/errorRoute');
-const bodyParser = require("body-parser")
-const cookieParser = require("cookie-parser")
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const jwt = require('jsonwebtoken');
 
 /* ***********************
  * Middleware
@@ -37,6 +38,22 @@ app.use(function(req, res, next){
 })
 
 app.use(cookieParser())
+
+// Make account info available to all views
+app.use((req, res, next) => {
+  const token = req.cookies?.jwt;
+  if (!token) {
+    res.locals.account = null;
+    return next();
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    res.locals.account = decoded; // e.g., { account_firstname, account_id, account_type, ... }
+  } catch {
+    res.locals.account = null; // bad/expired token
+  }
+  next();
+});
 
 
 // View engine
@@ -95,6 +112,10 @@ app.use((req, res) => {
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
+// make user info available to all views
+const { restoreUser } = require('./utilities/auth');
+app.use(restoreUser);
 
 /* ***********************
 * Express Error Handler

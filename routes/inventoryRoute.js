@@ -5,76 +5,80 @@ const router = new express.Router();
 const invController = require("../controllers/invController");
 const utilities     = require("../utilities");
 const invValidate   = require("../utilities/inventory-validation");
+const { requireStaff } = require("../utilities/auth");
 
-// Management
-router.get("/", utilities.handleErrors(invController.buildManagement));
-
-// By classification
+// ---------- PUBLIC ----------
 router.get(
   "/type/:classificationId",
   utilities.handleErrors(invController.buildByClassificationId)
 );
 
-// Vehicle detail
 router.get(
   "/detail/:invId",
   utilities.handleErrors(invController.buildByInvId)
 );
 
-// Add classification (GET + POST)
+// ---------- STAFF-ONLY ----------
+router.get(
+  "/",
+  requireStaff(), // Employee/Admin
+  utilities.handleErrors(invController.buildManagement)
+);
+
 router.get(
   "/add-classification",
+  requireStaff(),
   utilities.handleErrors(invController.buildAddClassification)
 );
 router.post(
   "/add-classification",
+  requireStaff(),
   invValidate.classificationRules(),
   invValidate.checkClassification,
   utilities.handleErrors(invController.addClassification)
 );
 
-// Add inventory (GET + POST)
 router.get(
   "/add-inventory",
+  requireStaff(),
   utilities.handleErrors(invController.buildAddInventory)
 );
 router.post(
   "/add-inventory",
+  requireStaff(),
   invValidate.vehicleRules(),
   invValidate.checkVehicle,
   utilities.handleErrors(invController.addInventory)
 );
 
-// Edit inventory (form)
 router.get(
   "/edit/:inv_id",
+  requireStaff(),
   utilities.handleErrors(invController.buildEditInventory)
 );
-
-// Update inventory (submit)
 router.post(
   "/update",
+  requireStaff(),
   invValidate.vehicleRules(),
-  invValidate.checkUpdateData, // <- make sure this exists in inventory-validation.js
+  invValidate.checkUpdateData, // your existing update validator
   utilities.handleErrors(invController.updateInventory)
 );
 
-// Delete inventory (confirmation screen)
 router.get(
-  "/delete/:inv_id",                    // e.g., /inv/delete/42
+  "/delete/:inv_id",
+  requireStaff(),
   utilities.handleErrors(invController.buildDeleteInventory)
 );
-
-// Delete inventory (perform delete)
 router.post(
-  "/delete",                            // form will POST to /inv/delete
-  utilities.handleErrors(invController.deleteInventory)
+  "/delete",
+  requireStaff(),
+  utilities.handleErrors(invController.deleteInventory) // your delete executor
 );
 
-
-// JSON for management table
+// JSON used by the management screen’s dropdown/table
 router.get(
   "/getInventory/:classification_id",
+  requireStaff(),
   utilities.handleErrors(invController.getInventoryJSON)
 );
 
