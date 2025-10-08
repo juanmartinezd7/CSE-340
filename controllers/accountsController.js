@@ -6,6 +6,7 @@ require('dotenv').config();
 const accountModel = require('../models/account-model');
 const utilities = require('../utilities');
 
+
 /* ---------- Views ---------- */
 
 // GET /account/login
@@ -27,13 +28,27 @@ async function buildRegister(req, res) {
   });
 }
 
-// GET /account (default) → Account Management
-async function buildAccount(req, res) {
-  // (optional) you can check auth here later
-  res.render('account/management', {
-    title: 'Account Management', // used for <title> and <h1> if you want
-  });
+
+// GET /account  (management)
+const reviewModel = require('../models/review-model');
+
+async function buildAccount(req, res, next) {
+  try {
+    const acct = res.locals.account; // set by auth middleware
+    const title = 'Account Management';
+
+    let myReviews = [];
+    if (acct?.account_id) {
+      const r = await reviewModel.getReviewsByAccount(acct.account_id);
+      myReviews = Array.isArray(r?.rows) ? r.rows : (Array.isArray(r) ? r : []);
+    }
+
+    res.render('account/management', { title, myReviews });
+  } catch (err) {
+    next(err);
+  }
 }
+
 
 /* ---------- Actions ---------- */
 

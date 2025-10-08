@@ -264,3 +264,24 @@ SET inv_image = REGEXP_REPLACE(
 WHERE inv_image ~ '(^|/)images/(?!vehicles/)'
     OR inv_thumbnail ~ '(^|/)images/(?!vehicles/)';
 COMMIT;
+-- Table structure for table `review`
+-- 1) Review table
+CREATE TABLE IF NOT EXISTS public.review (
+    review_id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    review_text text NOT NULL CHECK (length(btrim(review_text)) > 0),
+    review_date timestamptz NOT NULL DEFAULT now(),
+    inv_id integer NOT NULL,
+    account_id integer NOT NULL
+);
+-- 2) Foreign keys
+ALTER TABLE public.review
+ADD CONSTRAINT fk_review_inventory --The check constraint prevents blank reviews.
+    FOREIGN KEY (inv_id) REFERENCES public.inventory (inv_id) ON UPDATE CASCADE ON DELETE CASCADE;
+-- ON DELETE CASCADE cleans reviews when their vehicle/account is removed.
+ALTER TABLE public.review
+ADD CONSTRAINT fk_review_account --The check constraint prevents blank reviews.
+    FOREIGN KEY (account_id) REFERENCES public.account (account_id) ON UPDATE CASCADE ON DELETE CASCADE;
+-- ON DELETE CASCADE cleans reviews when their vehicle/account is removed.
+-- 3) Indexes
+CREATE INDEX IF NOT EXISTS idx_review_inv ON public.review (inv_id, review_date DESC);
+CREATE INDEX IF NOT EXISTS idx_review_acct ON public.review (account_id, review_date DESC);

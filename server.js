@@ -15,6 +15,10 @@ const errorRoutes = require('./routes/errorRoute');
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const jwt = require('jsonwebtoken');
+const reviewRoute = require("./routes/reviewRoute");
+
+
+
 
 /* ***********************
  * Middleware
@@ -79,13 +83,18 @@ app.use(express.urlencoded({ extended: false }));
 // (optional) Parse JSON bodies if you ever POST JSON
 app.use(express.json());
 
+//Edit/Delete Reviews
+app.use("/reviews", reviewRoute);
 
 // Routes
 const baseController = require('./controllers/baseController');
 const inventoryRoute = require('./routes/inventoryRoute');
 const accountRoutes = require('./routes/accountRoute');
-// const staticRoutes = require('./routes/static'); // not needed if using express.static above
-// app.use(staticRoutes);
+const reviewRoutes = require('./routes/reviewRoute');
+
+// reviews
+app.use("/reviews", reviewRoutes)
+app.use(express.urlencoded({ extended: true }));
 
 // server.js (near the top, before app.use('/account', ...))
 app.use(express.urlencoded({ extended: false }));
@@ -116,6 +125,8 @@ app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-
 // make user info available to all views
 const { restoreUser } = require('./utilities/auth');
 app.use(restoreUser);
+
+
 
 /* ***********************
 * Express Error Handler

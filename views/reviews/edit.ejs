@@ -1,0 +1,43 @@
+<!--views/reviews/edit.ejs-->
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('../partials/head') %></head>
+<body class="checkerboard">
+<div class="page">
+  <%- include('../partials/brandbar') %>
+  <%- include('../partials/navigation') %>
+
+  <main class="container main-content">
+    <h1 class="page-title"><%= title %></h1>
+
+    <% if (typeof messages === 'function') { %>
+      <%- messages() %>
+    <% } %>
+
+    <form action="/reviews/update" method="post" class="auth-form">
+      <div class="form-row">
+        <label for="review_text">Review text</label>
+        <textarea
+          id="review_text"
+          name="review_text"
+          required
+          minlength="3"
+          maxlength="2000"
+          rows="6"
+          aria-invalid="<%= (errors && errors.review_text) ? 'true' : 'false' %>"
+>         <%= typeof review_text !== 'undefined' ? review_text : '' %></textarea>
+
+      </div>
+
+      <input type="hidden" name="review_id" value="<%= review_id %>">
+      <input type="hidden" name="inv_id" value="<%= inv_id %>">
+
+      <button type="submit" class="btn-primary">Update Review</button>
+    </form>
+  </main>
+
+  <%- include('../partials/footer') %>
+</div>
+</body>
+</html>
+

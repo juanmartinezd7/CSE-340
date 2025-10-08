@@ -1,0 +1,35 @@
+<!--views/reviews/delete.ejs-->
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('../partials/head') %></head>
+<body class="checkerboard">
+<div class="page">
+  <%- include('../partials/brandbar') %>
+  <%- include('../partials/navigation') %>
+
+  <main class="container main-content">
+    <h1 class="page-title"><%= title %></h1>
+
+    <% if (typeof messages === 'function') { %>
+      <%- messages() %>
+    <% } %>
+
+    <p class="warning">Confirm Deletion — This cannot be undone.</p>
+
+    <form action="/reviews/delete" method="post" class="auth-form">
+      <div class="form-row">
+        <label>Review</label>
+        <textarea rows="6" readonly><%= review_text %></textarea>
+      </div>
+
+      <input type="hidden" name="review_id" value="<%= review_id %>">
+      <input type="hidden" name="inv_id" value="<%= inv_id %>">
+
+      <button type="submit" class="btn-danger">Delete Review</button>
+    </form>
+  </main>
+
+  <%- include('../partials/footer') %>
+</div>
+</body>
+</html>

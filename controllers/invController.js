@@ -1,6 +1,7 @@
 // controllers/invController.js
 const invModel = require("../models/inventory-model");
 const utilities = require("../utilities/");
+const reviewModel = require("../models/review-model")
 
 const invCont = {};
 
@@ -40,25 +41,37 @@ invCont.buildByInvId = async function (req, res, next) {
       return next({ status: 400, message: "Invalid vehicle id." });
     }
 
-    // Use whatever your model exposes:
-    const item =
-      (await invModel.getVehicleByInvId?.(invId)) ??
-      (await invModel.getInventoryById?.(invId));
+    // Get the item (pick the function your model actually has)
+    const getById =
+      typeof invModel.getVehicleByInvId === "function"
+        ? invModel.getVehicleByInvId
+        : invModel.getInventoryById;
 
+    if (typeof getById !== "function") {
+      throw new Error("No get-by-id function found on invModel");
+    }
+
+    const item = await getById(invId);
     if (!item) return next({ status: 404, message: "Vehicle not found." });
 
-    const title = `${item.inv_year} ${item.inv_make} ${item.inv_model}`;
-    const price = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
-      .format(item.inv_price);
-    const miles = item.inv_miles != null
-      ? new Intl.NumberFormat("en-US").format(item.inv_miles)
-      : null;
+    const title = `${String(item.inv_year).trim()} ${item.inv_make} ${item.inv_model}`;
+    const price = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(item.inv_price);
+    const miles = item.inv_miles != null ? new Intl.NumberFormat("en-US").format(item.inv_miles) : null;
 
-    return res.render("inventory/detail", { title, item, price, miles });
+    // Reviews (newest first)
+    let reviews = [];
+    if (typeof reviewModel.getByInvId === "function") {
+      const r = await reviewModel.getByInvId(invId);
+      reviews = Array.isArray(r?.rows) ? r.rows : Array.isArray(r) ? r : [];
+      reviews.sort((a, b) => new Date(b.review_date) - new Date(a.review_date));
+    }
+
+    return res.render("inventory/detail", { title, item, price, miles, reviews });
   } catch (err) {
     next(err);
   }
 };
+
 
 /* -----------------------------
  *  Management dashboard

@@ -1,44 +1,53 @@
 // routes/accountRoute.js
 const express = require('express');
-const router  = express.Router();
+const router = express.Router();
 
 const accountsController = require('../controllers/accountsController');
-const utilities          = require('../utilities');
-const validate           = require('../utilities/account-validation');
+const utilities = require('../utilities');
+const validate = require('../utilities/account-validation');
+const auth = require('../utilities/auth');            // <-- ADD THIS
 
-// ✅ import the specific middleware functions by name
-const { requireAuth, redirectIfAuthed } = require('../utilities/auth');
+// Default /account → account management (protected)
+router.get('/', auth.requireAuth, utilities.handleErrors(accountsController.buildAccount));
 
-/* ===========================
-   Account routes
-   =========================== */
+// Login / Register (redirect away if already authed)
+router.get('/login',    auth.redirectIfAuthed, utilities.handleErrors(accountsController.buildLogin));
+router.get('/register', auth.redirectIfAuthed, utilities.handleErrors(accountsController.buildRegister));
 
-// Default /account → Account Management (protected)
-router.get(
-  '/',
-  requireAuth,
-  utilities.handleErrors(accountsController.buildManagement) // or buildAccount if that's your name
+// Update account (GET)
+router.get('/update/:account_id',
+  auth.requireAuth,
+  utilities.handleErrors(accountsController.buildUpdateView)
 );
 
-// Public: Login & Register
-router.get('/login',    redirectIfAuthed, utilities.handleErrors(accountsController.buildLogin));
-router.get('/register', redirectIfAuthed, utilities.handleErrors(accountsController.buildRegister));
+// Update account (POST)
+router.post('/update',
+  auth.requireAuth,
+  validate.updateAccountRules(),
+  validate.checkUpdateAccountFlash,
+  utilities.handleErrors(accountsController.updateAccount)
+);
 
-// Registration (POST)
-router.post(
-  '/register',
+// Update password (POST)
+router.post('/update-password',
+  auth.requireAuth,
+  validate.updatePasswordRules(),
+  validate.checkUpdatePasswordFlash,
+  utilities.handleErrors(accountsController.updatePassword)
+);
+
+// Register
+router.post('/register',
   validate.registrationRules(),
   validate.checkRegDataFlash,
   utilities.handleErrors(accountsController.registerAccount)
 );
 
-// Login (POST)
-// If your controller uses `login` instead of `accountLogin`, change the next line accordingly.
-router.post(
-  '/login',
+// Login
+router.post('/login',
   validate.loginRules(),
   validate.checkLoginDataFlash,
-  utilities.handleErrors(accountsController.accountLogin) // ← use .login if that's your function name
+  utilities.handleErrors(accountsController.accountLogin)
 );
 
 // Logout
@@ -47,30 +56,5 @@ router.post('/logout', (req, res) => {
   req.flash('notice', 'You have been logged out.');
   res.redirect('/');
 });
-
-// Update account page (GET)
-router.get(
-  '/update/:account_id',
-  requireAuth,
-  utilities.handleErrors(accountsController.buildUpdateView)
-);
-
-// Update account (names/email) (POST)
-router.post(
-  '/update',
-  requireAuth,
-  validate.updateAccountRules(),
-  validate.checkUpdateAccountFlash,
-  utilities.handleErrors(accountsController.updateAccount)
-);
-
-// Update password (POST)
-router.post(
-  '/update-password',
-  requireAuth,
-  validate.updatePasswordRules(),
-  validate.checkUpdatePasswordFlash,
-  utilities.handleErrors(accountsController.updatePassword)
-);
 
 module.exports = router;

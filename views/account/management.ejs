@@ -30,6 +30,30 @@
             <a href="/account/update/<%= acct.account_id %>">Update account information</a>
           </p>
 
+          <!--Reviews-->
+          <h3>Your Reviews</h3>
+          <% const rv = Array.isArray(myReviews) ? myReviews : []; %>
+          <% if (rv.length) { %>
+            <ul class="user-reviews">
+              <% rv.forEach(r => { %>
+                <li>
+                  <div>
+                    <strong><%= (r.inv_year || '').toString().trim() %> <%= r.inv_make %> <%= r.inv_model %></strong>
+                    <span class="review-date"><%= new Date(r.review_date).toLocaleDateString() %></span>
+                  </div>
+                  <p><%= r.review_text %></p>
+                  <p class="muted">
+                    <a href="/reviews/edit/<%= r.review_id %>">Edit</a>
+                    |
+                    <a href="/reviews/delete/<%= r.review_id %>">Delete</a>
+                  </p>
+                </li>
+              <% }) %>
+            </ul>
+          <% } else { %>
+            <p>You haven't written any reviews yet.</p>
+          <% } %>
+
           <!-- Admin/Employee-only block -->
           <% if (acct.account_type === 'Employee' || acct.account_type === 'Admin') { %>
             <h3 class="mt-4">Inventory Management</h3>

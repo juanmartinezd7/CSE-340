@@ -12,6 +12,10 @@
       <main class="container main-content vehicle-detail">
         <!-- Title at top -->
         <h1 class="page-title"><%= title %></h1>
+        <% if (typeof messages === 'function') { %> 
+          <%- messages() %>
+        <% } %>
+
 
         <section class="vd-grid">
           <!-- Left: big image -->
@@ -41,6 +45,51 @@
             </div>
           </aside>
         </section>
+        <h2>Reviews</h2>
+
+<% if (reviews && reviews.length) { %>
+  <ul class="reviews">
+    <% reviews.forEach(r => { 
+         const screenName = (r.account_firstname?.[0] || "").toUpperCase() + (r.account_lastname || "");
+    %>
+      <li class="review">
+        <div class="review-meta">
+          <strong><%= screenName %></strong>
+          <span class="review-date"><%= new Date(r.review_date).toLocaleString() %></span>
+        </div>
+        <p class="review-text"><%= r.review_text %></p>
+      </li>
+    <% }) %>
+  </ul>
+<% } else { %>
+  <p>No reviews yet for this vehicle, be the first one to add a review.</p>
+<% } %>
+
+<% if (locals.account) { %>
+  <hr>
+  <h3>Write a review</h3>
+  <p>Your screen name: 
+    <strong>
+      <%= (locals.account.account_firstname?.[0] || "").toUpperCase() + locals.account.account_lastname %>
+    </strong>
+  </p>
+
+  <form action="/reviews/add" method="post" class="review-form">
+    <div class="form-row">
+      <label for="review_text">Your review</label>
+      <textarea id="review_text" name="review_text" required minlength="3" maxlength="2000"
+                rows="5" placeholder="Share your thoughts..."></textarea>
+    </div>
+    <input type="hidden" name="inv_id" value="<%= item.inv_id %>">
+    <input type="hidden" name="account_id" value="<%= locals.account.account_id %>">
+    <button type="submit" class="btn-primary">Post Review</button>
+  </form>
+<% } else { %>
+  <p>
+    <a href="/account/login">Log in</a> to write a review.
+  </p>
+<% } %>
+
       </main>
 
       <%- include('../partials/footer') %>
